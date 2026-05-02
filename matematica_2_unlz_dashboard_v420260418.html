@@ -1,0 +1,3248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Matemática II - UNLZ | Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Base */
+  --bg:#393839;
+  --surface:#2e2d2e;
+  --surface2:#252425;
+
+  /* Primary — verde tecno */
+  --primary:#3ddc84;
+  --primary-dim:rgba(61,220,132,.18);
+  --primary-glow:rgba(61,220,132,.08);
+  --primary-light:#6febb3;
+  --primary-line:rgba(61,220,132,.22);
+
+  /* Secondary — gris cálido iluminado */
+  --secondary:#8a9a8e;
+  --secondary-dim:rgba(138,154,142,.12);
+  --secondary-line:rgba(138,154,142,.2);
+
+  /* Texto */
+  --ink:#e8ede9;
+  --muted:#7a8a7d;
+
+  /* Alertas — derivadas de primary/secondary */
+  --warn:#c8b87a;           /* amarillo apagado */
+  --warn-dim:rgba(200,184,122,.08);
+  --warn-line:rgba(200,184,122,.22);
+  --danger:#b06060;         /* rojo apagado */
+  --danger-dim:rgba(176,96,96,.08);
+  --danger-line:rgba(176,96,96,.22);
+
+  /* Utilidades */
+  --card-glow:rgba(61,220,132,.09);
+  --r:18px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* BG — glow verde muy tenue en esquina */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 55% 45% at 5% 95%, rgba(61,220,132,.07) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 35% at 95% 5%, rgba(138,154,142,.05) 0%, transparent 50%);
+  pointer-events:none;z-index:0;
+}
+
+/* HEADER */
+header{
+  position:sticky;top:0;z-index:100;
+  padding:16px 28px;
+  background:rgba(46,45,46,.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--primary-line);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+}
+.logo{ display:flex;align-items:center;gap:14px; }
+.logo-badge{
+  width:42px;height:42px;border-radius:12px;
+  background:var(--surface2);
+  border:1px solid var(--primary-line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Serif Display',serif;
+  font-size:20px;color:var(--primary);
+  box-shadow:0 0 14px rgba(61,220,132,.18);
+}
+.logo-text h1{
+  font-family:'DM Serif Display',serif;
+  font-size:19px;letter-spacing:-.02em;color:var(--ink);
+}
+.logo-text p{font-size:12px;color:var(--muted);margin-top:2px}
+.header-pills{display:flex;gap:8px;flex-wrap:wrap}
+.hpill{
+  padding:5px 13px;border-radius:999px;font-size:12px;font-weight:700;
+  border:1px solid var(--secondary-line);color:var(--muted);background:var(--surface2);
+}
+.hpill.hot{
+  border-color:var(--primary-line);color:var(--primary);
+  background:var(--primary-glow);
+}
+
+/* MAIN */
+main{
+  max-width:1200px;margin:0 auto;
+  padding:28px 24px 80px;
+  position:relative;z-index:1;
+}
+
+/* STATS ROW */
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;margin-bottom:24px;
+}
+.stat-card{
+  background:var(--surface);
+  border:1px solid var(--secondary-line);
+  border-radius:var(--r);
+  padding:18px;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+}
+.stat-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px var(--card-glow);
+  border-color:var(--primary-line);
+}
+.stat-card small{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.stat-card strong{display:block;font-size:21px;color:var(--primary);margin:8px 0 4px;font-family:'DM Serif Display',serif}
+.stat-card span{font-size:13px;color:var(--muted)}
+
+/* TABS */
+.tabs-wrap{
+  display:flex;gap:6px;flex-wrap:wrap;
+  margin-bottom:22px;
+  padding:5px;
+  background:var(--surface2);
+  border:1px solid var(--secondary-line);
+  border-radius:14px;
+  width:fit-content;
+}
+.tab-btn{
+  border:0;background:transparent;
+  color:var(--muted);
+  padding:9px 18px;
+  border-radius:10px;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;font-size:13px;
+  cursor:pointer;transition:.18s;
+  white-space:nowrap;
+}
+.tab-btn:hover{color:var(--primary-light);background:var(--primary-glow)}
+.tab-btn.active{
+  background:var(--primary-dim);
+  color:var(--primary);
+  box-shadow:0 0 10px rgba(61,220,132,.15);
+}
+
+/* PANELS */
+.panel{display:none;animation:fadeUp .22s ease}
+.panel.active{display:block}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* CARDS */
+.card{
+  background:var(--surface);
+  border:1px solid var(--secondary-line);
+  border-radius:var(--r);
+  padding:22px;
+  margin-bottom:16px;
+  transition:border-color .2s,box-shadow .2s;
+}
+.card:hover{
+  border-color:var(--primary-line);
+  box-shadow:0 6px 22px var(--card-glow);
+}
+.card h2{
+  font-family:'DM Serif Display',serif;
+  font-size:24px;color:var(--primary-light);
+  margin-bottom:8px;letter-spacing:-.02em;
+}
+.card h3{
+  font-family:'DM Serif Display',serif;
+  font-size:18px;color:var(--primary);
+  margin-bottom:12px;
+}
+.card p{color:var(--muted);line-height:1.65;font-size:15px}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* DEF CARDS */
+.def-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;margin:14px 0;
+}
+.def-card{
+  background:var(--surface2);
+  border:1px solid var(--secondary-line);
+  border-radius:14px;
+  overflow:hidden;
+  transition:border-color .2s;
+}
+.def-card:hover{border-color:var(--primary-line)}
+.def-card summary{
+  list-style:none;
+  padding:11px 13px;
+  cursor:pointer;
+  color:var(--primary-light);
+  font-weight:700;font-size:13px;
+  background:var(--primary-glow);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.def-card summary::after{content:"+";font-size:16px;font-weight:900;color:var(--primary)}
+.def-card[open] summary::after{content:"−"}
+.def-card summary::-webkit-details-marker{display:none}
+.def-card p{padding:11px 13px;font-size:13px;color:var(--muted);line-height:1.5}
+
+/* DETAILS */
+details{
+  background:var(--surface2);
+  border:1px solid var(--secondary-line);
+  border-radius:14px;
+  padding:13px 15px;
+  margin:8px 0;
+  transition:border-color .2s;
+}
+details[open]{border-color:var(--primary-line)}
+summary{
+  cursor:pointer;font-weight:700;
+  color:var(--primary-light);
+  list-style:none;
+  display:flex;align-items:center;gap:8px;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{
+  content:'▶';
+  font-size:9px;color:var(--primary);
+  transition:transform .2s;
+  display:inline-block;
+}
+details[open] summary::before{transform:rotate(90deg)}
+
+/* FORMULA */
+.formula{
+  font-family:'DM Serif Display',Georgia,serif;
+  background:var(--primary-glow);
+  border-left:3px solid var(--primary);
+  padding:11px 15px;
+  border-radius:10px;
+  margin:10px 0;
+  font-size:16px;
+  color:var(--primary-light);
+  overflow-x:auto;
+}
+
+/* BADGES */
+.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.badge{
+  padding:5px 13px;border-radius:999px;font-size:12px;font-weight:700;
+  border:1px solid;display:inline-flex;align-items:center;gap:5px;
+}
+.badge.blue{background:var(--primary-glow);color:var(--primary);border-color:var(--primary-line)}
+.badge.green{background:var(--primary-glow);color:var(--primary-light);border-color:var(--primary-line)}
+.badge.yellow{background:var(--warn-dim);color:var(--warn);border-color:var(--warn-line)}
+.badge.red{background:var(--danger-dim);color:var(--danger);border-color:var(--danger-line)}
+
+/* CALLOUTS */
+.tip{
+  background:var(--warn-dim);
+  border:1px solid var(--warn-line);
+  border-radius:12px;padding:12px 15px;margin:10px 0;
+  font-size:14px;color:var(--warn);
+}
+.warning{
+  background:var(--danger-dim);
+  border:1px solid var(--danger-line);
+  border-radius:12px;padding:12px 15px;margin:10px 0;
+  font-size:14px;color:var(--danger);
+}
+.ok{
+  background:var(--primary-glow);
+  border:1px solid var(--primary-line);
+  border-radius:12px;padding:12px 15px;margin:10px 0;
+  font-size:14px;color:var(--primary-light);
+}
+.info{
+  background:var(--secondary-dim);
+  border:1px solid var(--secondary-line);
+  border-radius:12px;padding:12px 15px;margin:10px 0;
+  font-size:14px;color:var(--ink);
+}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;border-radius:12px;overflow:hidden;margin:12px 0}
+th{background:var(--primary-dim);color:var(--primary);padding:11px 13px;text-align:left;font-size:13px;font-weight:700}
+td{padding:10px 13px;border-bottom:1px solid var(--secondary-line);font-size:13px;color:var(--muted)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--primary-glow)}
+
+/* BTN */
+.btn{
+  border:1px solid var(--primary-line);
+  background:var(--primary-glow);
+  color:var(--primary);
+  padding:8px 15px;border-radius:10px;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;font-size:13px;
+  cursor:pointer;transition:.2s;margin:5px 5px 5px 0;
+}
+.btn:hover{background:var(--primary-dim);color:var(--primary-light)}
+.btn.outline{background:transparent;border:1px solid var(--secondary-line);color:var(--muted)}
+.btn.outline:hover{border-color:var(--primary-line);color:var(--primary)}
+.btn.outline{background:transparent;border:1px solid var(--secondary-line);color:var(--muted)}
+.btn.outline:hover{border-color:var(--primary-line);color:var(--primary)}
+
+/* TOGGLE BOX */
+.mini{
+  display:none;
+  margin-top:12px;
+  background:var(--surface2);
+  border:1px dashed var(--primary-line);
+  border-radius:12px;padding:13px;
+}
+
+/* ==================== RUTA DE APRENDIZAJE ==================== */
+.ruta-hero{
+  background:linear-gradient(135deg, var(--primary-glow), var(--secondary-dim));
+  border:1px solid var(--primary-line);
+  border-radius:20px;padding:28px;margin-bottom:20px;
+  text-align:center;
+}
+.ruta-hero h2{
+  font-family:'DM Serif Display',serif;
+  font-size:28px;color:var(--primary-light);margin-bottom:8px;
+}
+.ruta-hero p{color:var(--muted);max-width:600px;margin:0 auto;font-size:14px}
+
+/* PREVIOS */
+.previos-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;
+}
+.prev-card{
+  background:var(--surface2);
+  border:1px solid var(--secondary-line);
+  border-radius:16px;padding:18px;
+  transition:.2s;
+}
+.prev-card:hover{border-color:var(--primary-line);transform:translateY(-2px)}
+.prev-icon{font-size:24px;margin-bottom:8px}
+.prev-card h4{color:var(--primary);font-size:14px;font-weight:700;margin-bottom:6px}
+.prev-card p{font-size:13px;color:var(--muted);line-height:1.5}
+.prev-card .sub-items{margin-top:8px;display:flex;flex-direction:column;gap:4px}
+.prev-card .sub-item{
+  font-size:12px;color:var(--muted);padding:4px 8px;
+  background:var(--surface);border-radius:6px;border:1px solid var(--secondary-line);
+}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:30px;margin:10px 0}
+.timeline::before{
+  content:'';position:absolute;left:9px;top:0;bottom:0;
+  width:1px;background:linear-gradient(to bottom, var(--primary), var(--secondary));
+  border-radius:1px;
+}
+.t-item{position:relative;margin-bottom:16px}
+.t-dot{
+  position:absolute;left:-26px;top:6px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--secondary);border:2px solid var(--bg);
+  box-shadow:0 0 8px var(--secondary);
+}
+.t-dot.done{
+  background:var(--primary);border-color:var(--bg);
+  box-shadow:0 0 10px rgba(61,220,132,.4);
+}
+.t-dot.current{
+  background:var(--warn);border-color:var(--bg);
+  box-shadow:0 0 10px rgba(200,184,122,.5);
+  animation:pulse 1.8s infinite;
+}
+.t-dot.future{background:var(--surface2);border-color:var(--secondary)}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 6px rgba(200,184,122,.3)}
+  50%{box-shadow:0 0 16px rgba(200,184,122,.7)}
+}
+.t-content{
+  background:var(--surface2);border:1px solid var(--secondary-line);
+  border-radius:13px;padding:12px 14px;
+}
+.t-content.done{border-color:var(--primary-line)}
+.t-content.current{border-color:var(--warn-line)}
+.t-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;flex-wrap:wrap;gap:6px}
+.t-title{font-weight:700;color:var(--ink);font-size:14px}
+.t-date{font-size:11px;color:var(--muted);font-weight:700}
+.t-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:6px}
+.t-tags{display:flex;gap:5px;flex-wrap:wrap}
+.t-tag{
+  font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;
+  background:var(--primary-glow);color:var(--primary);border:1px solid var(--primary-line);
+}
+
+/* PARCIAL MAP GRID */
+.parc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.parc-box{
+  background:var(--surface2);border:1px solid var(--secondary-line);
+  border-radius:18px;padding:20px;
+}
+.parc-box h3{
+  font-family:'DM Serif Display',serif;
+  font-size:18px;color:var(--primary);margin-bottom:4px;
+}
+.parc-date{font-size:13px;color:var(--warn);font-weight:700;margin-bottom:12px}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:7px}
+.checklist li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:13px;color:var(--muted);padding:7px 11px;
+  background:var(--surface);border:1px solid var(--secondary-line);border-radius:9px;
+}
+.checklist li::before{content:'○';color:var(--primary);font-weight:700;flex-shrink:0}
+
+/* FOOTER */
+footer{
+  text-align:center;color:var(--muted);
+  padding:28px 20px 48px;font-size:13px;
+  border-top:1px solid var(--secondary-line);
+  position:relative;z-index:1;
+}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .stats-row,.grid-2,.grid-3,.def-grid,.previos-grid,.parc-grid{grid-template-columns:1fr}
+  .tabs-wrap{border-radius:12px;width:100%}
+  .tab-btn{padding:9px 12px;font-size:12px}
+  header{position:relative}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-badge">M²</div>
+    <div class="logo-text">
+      <h1>Matemática II — UNLZ</h1>
+      <p>Licenciatura en Administración · Dashboard de estudio</p>
+    </div>
+  </div>
+  <div class="header-pills">
+    <span class="hpill hot">1° Parcial: 16 may</span>
+    <span class="hpill">2° Parcial: 11 jul</span>
+    <span class="hpill">5 clases cargadas</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <small>Primer parcial</small>
+      <strong>16 mayo</strong>
+      <span>Matrices · Det. · Sistemas · I-P · PL</span>
+    </div>
+    <div class="stat-card">
+      <small>Segundo parcial</small>
+      <strong>11 julio</strong>
+      <span>Func. varias vars · Derivadas · Ec. dif.</span>
+    </div>
+    <div class="stat-card">
+      <small>Temas vistos</small>
+      <strong>5 clases</strong>
+      <span>Matrices · Ec. Mat. · Det. · Adj. · Inversa</span>
+    </div>
+    <div class="stat-card">
+      <small>Próximo tema</small>
+      <strong>Sistemas</strong>
+      <span>Gauss, Gauss-Jordan y Cramer</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <nav class="tabs-wrap">
+    <button class="tab-btn active" onclick="openTab('ruta',this)">🗺️ Ruta de estudio</button>
+    <button class="tab-btn" onclick="openTab('clase0104',this)">01/04 · Matrices I</button>
+    <button class="tab-btn" onclick="openTab('clase0804',this)">08/04 · Matrices II</button>
+    <button class="tab-btn" onclick="openTab('clase1104',this)">11/04 · Ec. Matriciales</button>
+    <button class="tab-btn" onclick="openTab('determinantes',this)">11/04 · Determinantes</button>
+    <button class="tab-btn" onclick="openTab('ejedet1504',this)">15/04 · Ejercicios Det.</button>
+    <button class="tab-btn" onclick="openTab('clase1804',this)">18/04 · Inversa por Adjunta</button>
+    <button class="tab-btn" onclick="openTab('sistemas',this)">18/04 · Sistemas de Ec.</button>
+    <button class="tab-btn" onclick="openTab('parciales',this)">📋 Mapa de parciales</button>
+  </nav>
+
+  <!-- ========================================================= -->
+  <!--  PANEL: RUTA DE ESTUDIO                                   -->
+  <!-- ========================================================= -->
+  <section id="ruta" class="panel active">
+
+    <div class="ruta-hero">
+      <h2>Ruta de aprendizaje</h2>
+      <p>Seguí este orden para construir los conceptos de a uno. Cada tema depende del anterior. Los temas marcados en <span style="color:var(--warn);font-weight:700">amarillo</span> son los que estás viendo ahora.</p>
+    </div>
+
+    <!-- CONOCIMIENTOS PREVIOS -->
+    <div class="card" style="margin-bottom:24px">
+      <h3>📚 Conocimientos previos necesarios</h3>
+      <p style="margin-bottom:18px">Antes de empezar Matemática II, conviene tener claro lo siguiente. Si algo de esto no está firme, vale la pena repasarlo.</p>
+      <div class="previos-grid">
+
+        <div class="prev-card">
+          <div class="prev-icon">🔢</div>
+          <h4>Conjuntos numéricos</h4>
+          <p>Saber distinguir ℕ, ℤ, ℚ, ℝ e irracionales. La materia usa el concepto de <em>escalar</em> = número real todo el tiempo.</p>
+          <div class="sub-items">
+            <div class="sub-item">Naturales, enteros, racionales</div>
+            <div class="sub-item">Irracionales (√2, π, e…)</div>
+            <div class="sub-item">Módulo y valor absoluto</div>
+          </div>
+        </div>
+
+        <div class="prev-card">
+          <div class="prev-icon">✏️</div>
+          <h4>Álgebra básica</h4>
+          <p>Operaciones con expresiones algebraicas, factor común, y manejo de ecuaciones con una variable.</p>
+          <div class="sub-items">
+            <div class="sub-item">Suma, resta, producto, cociente</div>
+            <div class="sub-item">Factor común y distributiva</div>
+            <div class="sub-item">Ecuaciones lineales en una variable</div>
+          </div>
+        </div>
+
+        <div class="prev-card">
+          <div class="prev-icon">📊</div>
+          <h4>Sistemas de ecuaciones (base)</h4>
+          <p>Haber visto sistemas 2×2 con sustitución o igualación. En esta materia se generaliza con matrices.</p>
+          <div class="sub-items">
+            <div class="sub-item">2 ecuaciones, 2 incógnitas</div>
+            <div class="sub-item">Método de sustitución</div>
+            <div class="sub-item">Interpretación gráfica (opcional)</div>
+          </div>
+        </div>
+
+        <div class="prev-card">
+          <div class="prev-icon">📈</div>
+          <h4>Funciones de una variable</h4>
+          <p>Para el 2° parcial vas a necesitar dominar bien funciones. Derivadas, reglas y propiedades son la base de todo.</p>
+          <div class="sub-items">
+            <div class="sub-item">Concepto de función f(x)</div>
+            <div class="sub-item">Derivada: regla de la potencia</div>
+            <div class="sub-item">Regla del producto, cociente y cadena</div>
+          </div>
+        </div>
+
+        <div class="prev-card">
+          <div class="prev-icon">🔣</div>
+          <h4>Notación y simbología</h4>
+          <p>Manejar bien la notación matemática evita confusiones al operar matrices y escribir determinantes.</p>
+          <div class="sub-items">
+            <div class="sub-item">Subíndices (a<sub>ij</sub>)</div>
+            <div class="sub-item">Sumatoria (Σ)</div>
+            <div class="sub-item">Superíndices como potencia vs inversa</div>
+          </div>
+        </div>
+
+        <div class="prev-card">
+          <div class="prev-icon">📉</div>
+          <h4>Optimización básica</h4>
+          <p>Para programación lineal y extremos de funciones es útil tener noción de máximos y mínimos.</p>
+          <div class="sub-items">
+            <div class="sub-item">Concepto de máximo y mínimo</div>
+            <div class="sub-item">Desigualdades e inecuaciones</div>
+            <div class="sub-item">Plano cartesiano y graficación</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TIMELINE PRIMER PARCIAL -->
+    <div class="grid-2" style="gap:20px">
+
+      <div class="card">
+        <h3>🎯 Primer parcial — 16 de mayo</h3>
+        <p style="margin-bottom:18px;font-size:13px">Los temas se encadenan: cada uno usa el anterior.</p>
+        <div class="timeline">
+
+          <div class="t-item">
+            <div class="t-dot done"></div>
+            <div class="t-content done">
+              <div class="t-header">
+                <span class="t-title">1 · Matrices — Conceptos y clasificación</span>
+                <span class="t-date" style="color:var(--primary)">✓ Visto 01/04</span>
+              </div>
+              <p class="t-desc">Elemento genérico a<sub>ij</sub>, tipos de matrices, igualdad y operaciones (suma, resta, producto escalar).</p>
+              <div class="t-tags">
+                <span class="t-tag">Suma</span><span class="t-tag">Producto escalar</span><span class="t-tag">Clasificación</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="t-item">
+            <div class="t-dot done"></div>
+            <div class="t-content done">
+              <div class="t-header">
+                <span class="t-title">2 · Matrices — Producto, transpuesta e inversa</span>
+                <span class="t-date" style="color:var(--primary)">✓ Visto 08/04</span>
+              </div>
+              <p class="t-desc">Producto matricial (no conmutativo), transpuesta, matriz inversa (Gauss-Jordan) y ecuaciones matriciales.</p>
+              <div class="t-tags">
+                <span class="t-tag">A·B ≠ B·A</span><span class="t-tag">Gauss-Jordan</span><span class="t-tag">Ec. matriciales</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="t-item">
+            <div class="t-dot done"></div>
+            <div class="t-content done">
+              <div class="t-header">
+                <span class="t-title">2b · Ecuaciones matriciales — Procedimiento completo</span>
+                <span class="t-date" style="color:var(--primary)">✓ Visto 11/04</span>
+              </div>
+              <p class="t-desc">Cálculo numérico de X elemento a elemento. Caso nuevo: X en ambos lados (A·X + B = X). Factor común con Identidad.</p>
+              <div class="t-tags">
+                <span class="t-tag">4 casos</span><span class="t-tag">Factor común I</span><span class="t-tag">Verificación A·X=B</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="t-item">
+            <div class="t-dot done"></div>
+            <div class="t-content done">
+              <div class="t-header">
+                <span class="t-title">3 · Determinantes</span>
+                <span class="t-date" style="color:var(--primary)">✓ Visto 11/04</span>
+              </div>
+              <p class="t-desc">Cálculo orden 2 (fórmula directa) y orden 3 (Sarrus). 10 propiedades. Cuándo det = 0.</p>
+              <div class="t-tags">
+                <span class="t-tag">det(A)</span><span class="t-tag">Sarrus</span><span class="t-tag">Singular vs Regular</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="t-item">
+            <div class="t-dot future"></div>
+            <div class="t-content">
+              <div class="t-header">
+                <span class="t-title">4 · Sistemas de ecuaciones</span>
+                <span class="t-date">Por venir</span>
+              </div>
+              <p class="t-desc">Gauss, Gauss-Jordan y regla de Cramer. Sistemas compatibles, incompatibles y dependientes.</p>
+              <div class="t-tags">
+                <span class="t-tag">Cramer</span><span class="t-tag">Gauss</span><span class="t-tag">Compatibilidad</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="t-item">
+            <div class="t-dot future"></div>
+            <div class="t-content">
+              <div class="t-header">
+                <span class="t-title">5 · Matriz insumo-producto</span>
+                <span class="t-date">Por venir</span>
+              </div>
+              <p class="t-desc">Modelo de Leontief: aplicación económica de las matrices. Requiere inversa y sistemas.</p>
+              <div class="t-tags">
+                <span class="t-tag">Leontief</span><span class="t-tag">Aplicación económica</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="t-item">
+            <div class="t-dot future"></div>
+            <div class="t-content">
+              <div class="t-header">
+                <span class="t-title">6 · Programación lineal</span>
+                <span class="t-date">Por venir</span>
+              </div>
+              <p class="t-desc">Función objetivo, restricciones e inecuaciones, región factible y vértices óptimos.</p>
+              <div class="t-tags">
+                <span class="t-tag">Función objetivo</span><span class="t-tag">Región factible</span><span class="t-tag">Simplex</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SEGUNDO PARCIAL -->
+      <div class="card">
+        <h3>🎯 Segundo parcial — 11 de julio</h3>
+        <p style="margin-bottom:18px;font-size:13px">Requiere dominar derivadas de una variable. Mucho más analítico.</p>
+        <div class="timeline">
+
+          <div class="t-item">
+            <div class="t-dot future"></div>
+            <div class="t-content">
+              <div class="t-header">
+                <span class="t-title">7 · Funciones de varias variables</span>
+                <span class="t-date">2° parcial</span>
+              </div>
+              <p class="t-desc">Extensión de f(x) a f(x,y). Dominio, imagen y representación espacial.</p>
+              <div class="t-tags"><span class="t-tag">f(x,y)</span><span class="t-tag">Dominio</span></div>
+            </div>
+          </div>
+
+          <div class="t-item">
+            <div class="t-dot future"></div>
+            <div class="t-content">
+              <div class="t-header">
+                <span class="t-title">8 · Derivadas parciales</span>
+                <span class="t-date">2° parcial</span>
+              </div>
+              <p class="t-desc">∂f/∂x y ∂f/∂y: derivar respecto a una variable dejando fija la otra. Diferencial total.</p>
+              <div class="t-tags"><span class="t-tag">∂f/∂x</span><span class="t-tag">Diferencial</span></div>
+            </div>
+          </div>
+
+          <div class="t-item">
+            <div class="t-dot future"></div>
+            <div class="t-content">
+              <div class="t-header">
+                <span class="t-title">9 · Funciones especiales</span>
+                <span class="t-date">2° parcial</span>
+              </div>
+              <p class="t-desc">Implícitas, compuestas (regla de la cadena generalizada) y homogéneas (Teorema de Euler).</p>
+              <div class="t-tags"><span class="t-tag">Implícitas</span><span class="t-tag">Cadena</span><span class="t-tag">Euler</span></div>
+            </div>
+          </div>
+
+          <div class="t-item">
+            <div class="t-dot future"></div>
+            <div class="t-content">
+              <div class="t-header">
+                <span class="t-title">10 · Extremos de funciones</span>
+                <span class="t-date">2° parcial</span>
+              </div>
+              <p class="t-desc">Máximos, mínimos y puntos silla. Criterio de la matriz Hessiana.</p>
+              <div class="t-tags"><span class="t-tag">Hessiana</span><span class="t-tag">Máximos/Mínimos</span><span class="t-tag">Punto silla</span></div>
+            </div>
+          </div>
+
+          <div class="t-item">
+            <div class="t-dot future"></div>
+            <div class="t-content">
+              <div class="t-header">
+                <span class="t-title">11 · Ecuaciones diferenciales</span>
+                <span class="t-date">2° parcial</span>
+              </div>
+              <p class="t-desc">EDO de primer orden: separables, lineales. Aplicaciones económicas.</p>
+              <div class="t-tags"><span class="t-tag">EDO</span><span class="t-tag">Variables separables</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPENDENCIAS ENTRE TEMAS -->
+    <div class="card">
+      <h3>🔗 Cómo se conectan los temas</h3>
+      <div class="grid-3" style="margin-top:14px">
+        <div class="info">
+          <strong style="display:block;margin-bottom:6px">Matrices → Determinantes</strong>
+          Para calcular el determinante necesitás entender la estructura de una matriz. El determinante te dice si existe la inversa.
+        </div>
+        <div class="info">
+          <strong style="display:block;margin-bottom:6px">Det. + Inversa → Sistemas</strong>
+          Los sistemas de ecuaciones se resuelven con eliminación (Gauss) o usando la inversa y Cramer (que usa det).
+        </div>
+        <div class="info">
+          <strong style="display:block;margin-bottom:6px">Sistemas → Insumo-Producto</strong>
+          El modelo de Leontief es un sistema de ecuaciones con estructura matricial específica. Sin sistemas, no hay Leontief.
+        </div>
+        <div style="background:var(--primary-glow);border:1px solid var(--primary-line);border-radius:16px;padding:14px;font-size:14px;color:var(--primary)">
+          <strong style="display:block;margin-bottom:6px">Derivadas 1 var → Derivadas parciales</strong>
+          Las derivadas parciales son exactamente las mismas reglas de Mate I, pero fijando las otras variables.
+        </div>
+        <div style="background:var(--primary-glow);border:1px solid var(--primary-line);border-radius:16px;padding:14px;font-size:14px;color:var(--primary)">
+          <strong style="display:block;margin-bottom:6px">Deriv. parciales → Extremos</strong>
+          Para encontrar máximos y mínimos igualás las derivadas parciales a cero (condición necesaria).
+        </div>
+        <div style="background:var(--warn-dim);border:1px solid var(--warn-line);border-radius:16px;padding:14px;font-size:14px;color:var(--warn)">
+          <strong style="display:block;margin-bottom:6px">⚠️ Tip de carrera</strong>
+          Matrices + Determinantes es la base de TODO el 1° parcial. Si eso está sólido, el resto se aprende más rápido.
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ========================================================= -->
+  <!--  PANEL: CLASE 01/04                                       -->
+  <!-- ========================================================= -->
+  <section id="clase0104" class="panel">
+    <div class="card">
+      <h2>Clase 01/04 — Introducción a matrices</h2>
+      <p>Se presentó el concepto de matriz, elemento genérico, clasificación y operaciones básicas.</p>
+      <div class="def-grid">
+        <details class="def-card">
+          <summary>a<sub>ij</sub> — Elem. genérico</summary>
+          <p>Es el elemento de la fila <b>i</b> y columna <b>j</b>. Se usa para referirse a cualquier elemento sin especificar uno en particular.</p>
+        </details>
+        <details class="def-card">
+          <summary>Escalar</summary>
+          <p>Un número real (ℝ). Puede ser natural, entero negativo, racional (fracción) o irracional (√2, π). Aparece todo el tiempo al multiplicar matrices.</p>
+        </details>
+        <details class="def-card">
+          <summary>Orden m × n</summary>
+          <p><b>m</b> = cantidad de filas, <b>n</b> = cantidad de columnas. Una matriz 3×2 tiene 3 filas y 2 columnas.</p>
+        </details>
+        <details class="def-card">
+          <summary>Igualdad de matrices</summary>
+          <p>Dos matrices son iguales si tienen el <b>mismo orden</b> Y sus <b>elementos homónimos</b> (misma posición ij) son iguales. Propiedades: reflexiva, simétrica y transitiva.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Clasificación de matrices</h3>
+        <details>
+          <summary>Por forma</summary>
+          <div style="margin-top:10px">
+            <div class="ok" style="margin-bottom:8px"><b>Rectangular:</b> distinta cantidad de filas y columnas (m ≠ n).</div>
+            <div class="ok"><b>Cuadrada:</b> igual cantidad de filas y columnas (m = n).</div>
+          </div>
+        </details>
+        <details>
+          <summary>Por elementos — Matriz nula</summary>
+          <p style="margin-top:8px">Todos sus elementos son cero. Es el <b>neutro de la suma</b>: A + 0 = A.</p>
+          <div class="formula">0 = (0<sub>ij</sub>)</div>
+        </details>
+        <details>
+          <summary>Matrices cuadradas especiales</summary>
+          <table>
+            <thead><tr><th>Tipo</th><th>Característica clave</th></tr></thead>
+            <tbody>
+              <tr><td><b>Triangular superior</b></td><td>Ceros debajo de la diagonal principal.</td></tr>
+              <tr><td><b>Triangular inferior</b></td><td>Ceros encima de la diagonal principal.</td></tr>
+              <tr><td><b>Diagonal</b></td><td>Ceros en todos lados excepto la diagonal principal.</td></tr>
+              <tr><td><b>Escalar</b></td><td>Diagonal con un mismo número repetido.</td></tr>
+              <tr><td><b>Identidad (I)</b></td><td>Diagonal principal = 1, resto = 0. Es el neutro del producto.</td></tr>
+              <tr><td><b>Simétrica</b></td><td>a<sub>ij</sub> = a<sub>ji</sub> (es igual a su transpuesta).</td></tr>
+              <tr><td><b>Antisimétrica</b></td><td>a<sub>ij</sub> = −a<sub>ji</sub> (mismo módulo, signo opuesto).</td></tr>
+            </tbody>
+          </table>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3>Operaciones — Suma y resta</h3>
+        <details>
+          <summary>Suma de matrices</summary>
+          <p style="margin-top:8px">Solo se pueden sumar matrices del <b>mismo orden</b>. Se suman los elementos en la misma posición (homónimos).</p>
+          <div class="formula">A + B = (a<sub>ij</sub> + b<sub>ij</sub>)</div>
+          <button class="btn outline" onclick="toggleBox('propSuma')">Ver propiedades</button>
+          <div id="propSuma" class="mini">
+            <p>✅ <b>Asociativa:</b> (A+B)+C = A+(B+C)</p>
+            <p>✅ <b>Conmutativa:</b> A+B = B+A</p>
+            <p>✅ <b>Neutro:</b> A + 0 = A (matriz nula)</p>
+            <p>✅ <b>Opuesto:</b> A + (−A) = 0</p>
+          </div>
+        </details>
+        <details>
+          <summary>Resta de matrices</summary>
+          <p style="margin-top:8px">El profe recomienda verla como suma del opuesto para no confundirse.</p>
+          <div class="formula">A − B = A + (−B)</div>
+        </details>
+        <details>
+          <summary>Producto escalar por matriz</summary>
+          <p style="margin-top:8px">Se multiplica cada elemento de la matriz por el escalar k.</p>
+          <div class="formula">k · A = (k · a<sub>ij</sub>)</div>
+          <button class="btn outline" onclick="toggleBox('propEsc')">Ver propiedades</button>
+          <div id="propEsc" class="mini">
+            <p>✅ <b>Distributiva (matrices):</b> k(A+B) = kA + kB</p>
+            <p>✅ <b>Distributiva (escalares):</b> (k+h)A = kA + hA</p>
+            <p>✅ <b>Asociativa mixta:</b> k(hA) = (kh)A</p>
+            <p>✅ <b>Neutro:</b> 1·A = A</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Multiplicación de matrices</h3>
+      <details>
+        <summary>Condición para multiplicar</summary>
+        <p style="margin-top:8px">El número de <b>columnas de A</b> debe ser igual al número de <b>filas de B</b>.</p>
+        <div class="formula">A<sub>m×n</sub> · B<sub>n×p</sub> = C<sub>m×p</sub></div>
+        <div class="tip">💡 <b>Tip de parcial:</b> antes de calcular, verificá las dimensiones. Si no coinciden (columnas A ≠ filas B), no se puede multiplicar.</div>
+      </details>
+      <details>
+        <summary>¿Cómo se calcula cada elemento?</summary>
+        <p style="margin-top:8px">El elemento c<sub>11</sub> se obtiene multiplicando fila 1 de A por columna 1 de B y sumando:</p>
+        <div class="formula">c<sub>11</sub> = a<sub>11</sub>·b<sub>11</sub> + a<sub>12</sub>·b<sub>21</sub> + a<sub>13</sub>·b<sub>31</sub></div>
+        <p>En general: se multiplica elemento a elemento y se suman los productos (producto escalar de fila por columna).</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========================================================= -->
+  <!--  PANEL: CLASE 08/04                                       -->
+  <!-- ========================================================= -->
+  <section id="clase0804" class="panel">
+    <div class="card">
+      <h2>Clase 08/04 — Producto, transpuesta, inversa y ecuaciones matriciales</h2>
+      <p>Se profundizó en propiedades del producto, transposición, cómo hallar la inversa con Gauss-Jordan y cómo resolver ecuaciones matriciales.</p>
+      <div class="def-grid">
+        <details class="def-card">
+          <summary>No conmutativa</summary>
+          <p>En general A·B ≠ B·A. El orden importa: hay que operar siempre del mismo lado.</p>
+        </details>
+        <details class="def-card">
+          <summary>Permutables</summary>
+          <p>Casos especiales donde sí se cumple A·B = B·A (por ejemplo A con la identidad).</p>
+        </details>
+        <details class="def-card">
+          <summary>Involutiva</summary>
+          <p>Propiedad de la transpuesta: (A<sup>T</sup>)<sup>T</sup> = A. Transponerla dos veces da la original.</p>
+        </details>
+        <details class="def-card">
+          <summary>Gauss-Jordan</summary>
+          <p>Se arma (A | I) y con operaciones elementales se transforma en (I | A<sup>-1</sup>).</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Producto de matrices — propiedades</h3>
+        <details>
+          <summary>Propiedades que SÍ se cumplen</summary>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+            <div class="ok">✅ <b>Asociativa:</b> (A·B)·C = A·(B·C)</div>
+            <div class="ok">✅ <b>Neutro:</b> A·I = I·A = A</div>
+            <div class="ok">✅ <b>Distributiva:</b> A·(B+C) = A·B + A·C</div>
+            <div class="ok">✅ <b>Asociativa mixta:</b> k(A·B) = (kA)·B = A·(kB)</div>
+          </div>
+        </details>
+        <details>
+          <summary>Propiedad que NO se cumple</summary>
+          <div class="warning" style="margin-top:10px">
+            ❌ <b>No conmutativa:</b> A·B ≠ B·A en general.
+            <div class="formula">A<sub>2×3</sub> · B<sub>3×2</sub> = C<sub>2×2</sub><br>B<sub>3×2</sub> · A<sub>2×3</sub> = D<sub>3×3</sub></div>
+            Incluso cuando los dos productos existen, dan matrices de distinto orden.
+          </div>
+        </details>
+        <details>
+          <summary>No existe inverso multiplicativo general</summary>
+          <p style="margin-top:8px">No todas las matrices tienen inversa. Las que no la tienen se llaman <b>singulares</b>. Solo las <b>cuadradas no singulares</b> tienen inversa.</p>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3>Transposición de matrices</h3>
+        <details>
+          <summary>¿Qué es la transpuesta?</summary>
+          <p style="margin-top:8px">Se cambian filas por columnas. La fila 1 pasa a ser la columna 1, la fila 2 pasa a ser la columna 2, etc.</p>
+          <div class="formula">Si A es m×n → A<sup>T</sup> es n×m</div>
+        </details>
+        <button class="btn outline" onclick="toggleBox('propTrans')">Ver propiedades</button>
+        <div id="propTrans" class="mini">
+          <p>✅ <b>Involutiva:</b> (A<sup>T</sup>)<sup>T</sup> = A</p>
+          <p>✅ <b>Suma:</b> (A+B)<sup>T</sup> = A<sup>T</sup> + B<sup>T</sup></p>
+          <p>✅ <b>Escalar:</b> (kA)<sup>T</sup> = k·A<sup>T</sup></p>
+          <p>✅ <b>Producto:</b> (A·B)<sup>T</sup> = B<sup>T</sup>·A<sup>T</sup> ← ojo, se invierten</p>
+        </div>
+
+        <div class="card" style="margin-top:16px;padding:16px">
+          <h3 style="font-size:16px;margin-bottom:10px">Matriz Inversa</h3>
+          <details>
+            <summary>Definición</summary>
+            <p style="margin-top:8px">Existe A<sup>-1</sup> si y solo si A es cuadrada y no singular (det ≠ 0).</p>
+            <div class="formula">A · A<sup>-1</sup> = A<sup>-1</sup> · A = I</div>
+          </details>
+          <div class="grid-2" style="margin-top:10px">
+            <div class="ok"><b>Regular / No singular</b><br>Tiene inversa. det(A) ≠ 0.</div>
+            <div class="warning"><b>Singular</b><br>No tiene inversa. det(A) = 0.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Gauss-Jordan para hallar la inversa</h3>
+      <details>
+        <summary>Operaciones elementales por fila</summary>
+        <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+          <div class="info">🔄 <b>Tipo 1:</b> Permutar dos filas entre sí (intercambiar F<sub>i</sub> ↔ F<sub>j</sub>).</div>
+          <div class="info">✖️ <b>Tipo 2:</b> Multiplicar todos los elementos de una fila por k ≠ 0.</div>
+          <div class="info">➕ <b>Tipo 3:</b> Sumar a una fila otra fila (o múltiplo de ella).</div>
+          <div class="info">🔀 <b>Combinadas:</b> Se pueden combinar las anteriores (Tipo 2 + Tipo 3 juntos).</div>
+        </div>
+      </details>
+      <details>
+        <summary>Procedimiento</summary>
+        <p style="margin-top:8px">Se arma la <b>matriz ampliada</b> con A a la izquierda y la identidad a la derecha. Aplicando operaciones elementales se convierte A en I: la derecha queda con A<sup>-1</sup>.</p>
+        <div class="formula">[A | I] → operaciones por fila → [I | A<sup>-1</sup>]</div>
+        <div class="tip">💡 Si en algún momento la parte izquierda tiene una fila de ceros, la matriz es singular y no tiene inversa.</div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>⚠️ Ecuaciones matriciales — Entra en el parcial</h3>
+      <div class="warning" style="margin-bottom:16px">
+        🔑 <b>Regla de oro:</b> las matrices no se "pasan dividiendo". Hay que multiplicar por la inversa <b>del mismo lado</b> donde está la incógnita.
+      </div>
+
+      <details>
+        <summary>Caso 1 — A·X = B</summary>
+        <p style="margin-top:8px">X está a la derecha de A. Multiplico A<sup>-1</sup> por la izquierda en ambos lados:</p>
+        <div class="formula">A<sup>-1</sup>·A·X = A<sup>-1</sup>·B → I·X = A<sup>-1</sup>·B → X = A<sup>-1</sup>·B</div>
+        <div class="tip">💡 La inversa va a la izquierda porque X está a la derecha de A.</div>
+      </details>
+
+      <details>
+        <summary>Caso 2 — X·M + R = S</summary>
+        <p style="margin-top:8px">Primero despejo: paso R al otro lado (la suma de una matriz con su opuesta da la <b>matriz nula</b>, que desaparece):</p>
+        <div class="formula">X·M + R − R = S − R → X·M = S − R</div>
+        <p>Ahora X está a la izquierda de M, entonces multiplico M<sup>-1</sup> por la derecha:</p>
+        <div class="formula">X·M·M<sup>-1</sup> = (S−R)·M<sup>-1</sup> → X = (S−R)·M<sup>-1</sup></div>
+      </details>
+
+      <details>
+        <summary>Caso 3 — X·A + 3X = B</summary>
+        <p style="margin-top:8px">No podés operar así porque X no tiene el mismo acompañante. Truco: 3X = X·(3I), porque I es el neutro (equivale a multiplicar por 1):</p>
+        <div class="formula">X·A + X·(3I) = B → X·(A + 3I) = B</div>
+        <p>X está a la izquierda, entonces:</p>
+        <div class="formula">X = B·(A + 3I)<sup>-1</sup></div>
+        <div class="tip">💡 El profe dice: "manda el que tiene X con la Matriz para elegir el lado donde va la inversa".</div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>🔜 Próximo tema: Determinantes</h3>
+      <p>El determinante es un número que se puede calcular a partir de cualquier matriz cuadrada. Sirve para:</p>
+      <div class="badge-row" style="margin-top:12px">
+        <span class="badge blue">Saber si existe la inversa</span>
+        <span class="badge blue">Resolver sistemas (Cramer)</span>
+        <span class="badge blue">Análisis de transformaciones</span>
+      </div>
+      <div class="formula">det(A) = 0 ⇒ A es singular ⇒ no tiene inversa</div>
+    </div>
+  </section>
+
+  <!-- ========================================================= -->
+  <!-- ========================================================= -->
+  <!--  PANEL: CLASE 11/04                                       -->
+  <!-- ========================================================= -->
+  <section id="clase1104" class="panel">
+    <div class="card">
+      <h2>Clase 11/04 — Ecuaciones matriciales: procedimiento completo</h2>
+      <p>Se empezó con un ejemplo numérico completo de A·X = B (con OEF, cálculo de X y dos verificaciones). Después se trabajaron los casos algebraicos 2, 3 y 4.</p>
+      <div class="def-grid">
+        <details class="def-card">
+          <summary>OEF — Operaciones Elem. de Fila</summary>
+          <p>Se arma [A|I] y con operaciones por fila se transforma en [I|A⁻¹]. Tres tipos: permutar filas, multiplicar por k≠0, sumar múltiplos de filas.</p>
+        </details>
+        <details class="def-card">
+          <summary>Verificación doble</summary>
+          <p>1) A·A⁻¹ = I (confirma que la inversa está bien). 2) A·X = B (confirma que X es correcta).</p>
+        </details>
+        <details class="def-card">
+          <summary>Factor común con X</summary>
+          <p>Cuando X aparece en varios términos: X sola = I·X, lo que permite agrupar y sacar factor común.</p>
+        </details>
+        <details class="def-card">
+          <summary>Lado de X = lado de la inversa</summary>
+          <p>Si X está a la derecha de la matriz, la inversa va a la derecha. Si está a la izquierda, la inversa va a la izquierda.</p>
+        </details>
+      </div>
+    </div>
+
+    <!-- EJEMPLO NUMÉRICO PRIMERO -->
+    <div class="card" id="ecuacionesMatriciales">
+      <h3>🔢 Ejemplo 1 — A·X = B con matrices reales (primer ejercicio de la clase)</h3>
+      <p style="margin-bottom:16px">Se planteó la ecuación, se halló A⁻¹ con OEF (Gauss-Jordan), se calculó X y se verificó de dos formas.</p>
+
+      <details>
+        <summary>Datos y planteo</summary>
+        <div class="grid-2" style="margin-top:12px;gap:12px">
+          <div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:6px">Matriz A:</p>
+            <div class="formula" style="text-align:center">
+              A = <span style="font-size:22px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:1.9">2 &nbsp; 3<br>1 &nbsp; 2</span>
+              <span style="font-size:22px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+          <div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:6px">Matriz B:</p>
+            <div class="formula" style="text-align:center">
+              B = <span style="font-size:22px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:1.9">4 &nbsp; 5<br>2 &nbsp; 7</span>
+              <span style="font-size:22px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+        </div>
+        <p style="margin-top:12px;font-size:14px;color:var(--muted)">Se despeja X multiplicando A⁻¹ por la izquierda en ambos miembros:</p>
+        <div class="formula">A<sup>-1</sup> · A · X = A<sup>-1</sup> · B &nbsp;→&nbsp;
+          <br/> I · X = A<sup>-1</sup> · B &nbsp;→&nbsp;
+          <br/> <b>X = A<sup>-1</sup> · B</b></div>
+      </details>
+
+      <details style="margin-top:12px">
+        <summary>OEF — Hallar A⁻¹ con Gauss-Jordan</summary>
+        <p style="margin-top:10px">Se arma [A | I] y se aplican operaciones por fila hasta obtener [I | A⁻¹]:</p>
+        <table style="margin-top:10px">
+          <thead><tr><th>Lado A</th><th>Lado I</th><th>Operación</th></tr></thead>
+          <tbody>
+            <tr><td>2 &nbsp;&nbsp; 3<br>1 &nbsp;&nbsp; 2</td><td>1 &nbsp;&nbsp; 0<br>0 &nbsp;&nbsp; 1</td><td>Estado inicial</td></tr>
+            <tr style="background:var(--primary-glow)"><td colspan="3" style="color:var(--primary-light);font-size:12px">→ F₁ ÷ 2</td></tr>
+            <tr><td>1 &nbsp;&nbsp; 3/2<br>1 &nbsp;&nbsp; 2</td><td>1/2 &nbsp;&nbsp; 0<br>0 &nbsp;&nbsp; 1</td><td>F₁ ← F₁ ÷ 2</td></tr>
+            <tr style="background:var(--primary-glow)"><td colspan="3" style="color:var(--primary-light);font-size:12px">→ F₂ ← F₂ − F₁ (anular el 1 de col.1 en F₂)</td></tr>
+            <tr><td>1 &nbsp;&nbsp; 3/2<br>0 &nbsp;&nbsp; 1/2</td><td>1/2 &nbsp;&nbsp; 0<br>−1/2 &nbsp;&nbsp; 1</td><td>F₂ ← F₂ − F₁</td></tr>
+            <tr style="background:var(--primary-glow)"><td colspan="3" style="color:var(--primary-light);font-size:12px">→ 2·F₂ (convertir 1/2 en 1)</td></tr>
+            <tr><td>1 &nbsp;&nbsp; 3/2<br>0 &nbsp;&nbsp; 1</td><td>1/2 &nbsp;&nbsp; 0<br>−1 &nbsp;&nbsp; 2</td><td>F₂ ← 2·F₂</td></tr>
+            <tr style="background:var(--primary-glow)"><td colspan="3" style="color:var(--primary-light);font-size:12px">→ F₁ ← F₁ − (3/2)·F₂ (anular el 3/2 de col.2 en F₁)</td></tr>
+            <tr><td>1 &nbsp;&nbsp; 0<br>0 &nbsp;&nbsp; 1</td><td>2 &nbsp;&nbsp; −3<br>−1 &nbsp;&nbsp; 2</td><td>F₁ ← F₁ − (3/2)·F₂</td></tr>
+          </tbody>
+        </table>
+        <div class="ok" style="margin-top:12px">
+          ✅ Se llegó a [I | A⁻¹]:
+          <div class="formula" style="margin-top:8px;text-align:center">
+            A<sup>-1</sup> = <span style="font-size:22px;vertical-align:middle">⎡</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:1.9">2 &nbsp;&nbsp; −3<br>−1 &nbsp;&nbsp; 2</span>
+            <span style="font-size:22px;vertical-align:middle">⎤</span>
+          </div>
+        </div>
+      </details>
+
+      <details style="margin-top:12px">
+        <summary>Verificación 1 — A · A⁻¹ = I</summary>
+        <p style="margin-top:10px">Se confirma que la inversa está bien calculada antes de usarla:</p>
+        <table style="margin-top:10px">
+          <thead><tr><th>Elemento</th><th>Operación</th><th>Resultado</th></tr></thead>
+          <tbody>
+            <tr><td>I<sub>(11)</sub></td><td>2·2 + 3·(−1) = 4 − 3</td><td><b>1 ✓</b></td></tr>
+            <tr><td>I<sub>(12)</sub></td><td>2·(−3) + 3·2 = −6 + 6</td><td><b>0 ✓</b></td></tr>
+            <tr><td>I<sub>(21)</sub></td><td>1·2 + 2·(−1) = 2 − 2</td><td><b>0 ✓</b></td></tr>
+            <tr><td>I<sub>(22)</sub></td><td>1·(−3) + 2·2 = −3 + 4</td><td><b>1 ✓</b></td></tr>
+          </tbody>
+        </table>
+        <div class="ok" style="margin-top:8px">✅ A · A⁻¹ = I confirmado.</div>
+      </details>
+
+      <details style="margin-top:12px">
+        <summary>X = A⁻¹ · B — Cálculo elemento a elemento</summary>
+        <table style="margin-top:12px">
+          <thead><tr><th>Elemento</th><th>Fila × Columna</th><th>Operación</th><th>Resultado</th></tr></thead>
+          <tbody>
+            <tr><td>X<sub>(11)</sub></td><td>F1·C1</td><td>2·4 + (−3)·2 = 8 − 6</td><td><b>2</b></td></tr>
+            <tr><td>X<sub>(12)</sub></td><td>F1·C2</td><td>2·5 + (−3)·7 = 10 − 21</td><td><b>−11</b></td></tr>
+            <tr><td>X<sub>(21)</sub></td><td>F2·C1</td><td>(−1)·4 + 2·2 = −4 + 4</td><td><b>0</b></td></tr>
+            <tr><td>X<sub>(22)</sub></td><td>F2·C2</td><td>(−1)·5 + 2·7 = −5 + 14</td><td><b>9</b></td></tr>
+          </tbody>
+        </table>
+        <div class="ok" style="margin-top:12px">✅
+          <div class="formula" style="margin-top:8px;text-align:center;border-color:var(--primary);background:var(--primary-glow);color:var(--primary)">
+            X = <span style="font-size:22px;vertical-align:middle">⎡</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:1.9">2 &nbsp;&nbsp; −11<br>0 &nbsp;&nbsp; 9</span>
+            <span style="font-size:22px;vertical-align:middle">⎤</span>
+          </div>
+        </div>
+      </details>
+
+      <details style="margin-top:12px">
+        <summary>Verificación 2 — A · X = B</summary>
+        <table style="margin-top:10px">
+          <thead><tr><th>Elemento</th><th>Operación</th><th>Esperado</th><th>¿OK?</th></tr></thead>
+          <tbody>
+            <tr><td>B<sub>(11)</sub></td><td>2·2 + 3·0 = 4</td><td>4</td><td>✓</td></tr>
+            <tr><td>B<sub>(12)</sub></td><td>2·(−11) + 3·9 = −22 + 27</td><td>5</td><td>✓</td></tr>
+            <tr><td>B<sub>(21)</sub></td><td>1·2 + 2·0 = 2</td><td>2</td><td>✓</td></tr>
+            <tr><td>B<sub>(22)</sub></td><td>1·(−11) + 2·9 = −11 + 18</td><td>7</td><td>✓</td></tr>
+          </tbody>
+        </table>
+        <div class="ok" style="margin-top:8px">✅ A · X = B confirmado. El ejercicio está correcto.</div>
+      </details>
+    </div>
+
+    <!-- CASOS ALGEBRAICOS -->
+    <div class="card">
+      <h3>📐 Casos algebraicos — sin matrices concretas (2, 3 y 4)</h3>
+      <p style="margin-bottom:16px">Después del ejemplo numérico se trabajaron tres casos con letras.</p>
+
+      <details>
+        <summary>Caso 2 — X·P = Q</summary>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+          <div class="info"><b>Ecuación:</b><div class="formula" style="margin-top:6px">X · P = Q</div></div>
+          <div class="info">X está a la izquierda → P⁻¹ por la <b>derecha</b>:<div class="formula" style="margin-top:6px">X · P · P<sup>-1</sup> = Q · P<sup>-1</sup></div></div>
+          <div class="ok"><b>Resultado:</b><div class="formula" style="margin-top:6px;border-color:var(--primary);background:var(--primary-glow);color:var(--primary)">X = Q · P<sup>-1</sup></div></div>
+        </div>
+      </details>
+
+      <details style="margin-top:12px">
+        <summary>Caso 3 — X·M + R = S</summary>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+          <div class="info"><b>Ecuación:</b><div class="formula" style="margin-top:6px">X · M + R = S</div></div>
+          <div class="info">Agrego (−R): R desaparece (Matriz Nula):<div class="formula" style="margin-top:6px">X · M = S − R</div></div>
+          <div class="info">X a la izquierda → M⁻¹ por la <b>derecha</b>:<div class="formula" style="margin-top:6px">X · M · M<sup>-1</sup> = (S − R) · M<sup>-1</sup></div></div>
+          <div class="ok"><b>Resultado:</b><div class="formula" style="margin-top:6px;border-color:var(--primary);background:var(--primary-glow);color:var(--primary)">X = (S − R) · M<sup>-1</sup></div></div>
+        </div>
+      </details>
+
+      <details style="margin-top:12px">
+        <summary>Caso 4 — A·X + B = X &nbsp;(X en ambos lados)</summary>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+          <div class="info"><b>Ecuación:</b><div class="formula" style="margin-top:6px">A · X + B = X</div></div>
+          <div class="info">Agrego (−X): la derecha queda en Matriz Nula:<div class="formula" style="margin-top:6px">A·X − X + B = 0</div></div>
+          <div class="info">Factor común de X. Como X = I·X:<div class="formula" style="margin-top:6px">(A − I)·X + B = 0</div></div>
+          <div class="info">Agrego (−B): B desaparece (Matriz Nula):<div class="formula" style="margin-top:6px">(A − I)·X = −B</div></div>
+          <div class="info">X a la derecha → (A−I)⁻¹ por la <b>izquierda</b>:<div class="formula" style="margin-top:6px">(A−I)<sup>-1</sup>·(A−I)·X = (A−I)<sup>-1</sup>·(−B)</div></div>
+          <div class="ok"><b>Resultado:</b><div class="formula" style="margin-top:6px;border-color:var(--primary);background:var(--primary-glow);color:var(--primary)">X = (A−I)<sup>-1</sup> · (−B)</div></div>
+        </div>
+        <div class="tip" style="margin-top:10px">💡 Truco clave: <b>X = I·X</b>. Eso hace aparecer la Identidad al sacar factor común.</div>
+      </details>
+    </div>
+
+    <!-- CUADRO RESUMEN -->
+    <div class="card">
+      <h3>📋 Resumen: todos los casos de ecuaciones matriciales</h3>
+      <table>
+        <thead><tr><th>Caso</th><th>Ecuación original</th><th>Resultado final</th><th>Clave</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge blue">Caso 1</span></td><td>A·X = B</td><td class="formula" style="font-size:13px;padding:6px 10px">X = A<sup>-1</sup>·B</td><td>Inversa a la izquierda</td></tr>
+          <tr><td><span class="badge blue">Caso 2</span></td><td>X·P = Q</td><td class="formula" style="font-size:13px;padding:6px 10px">X = Q·P<sup>-1</sup></td><td>Inversa a la derecha</td></tr>
+          <tr><td><span class="badge blue">Caso 3</span></td><td>X·M + R = S</td><td class="formula" style="font-size:13px;padding:6px 10px">X = (S−R)·M<sup>-1</sup></td><td>Despejar, inversa a la derecha</td></tr>
+          <tr><td><span class="badge yellow">Caso 4</span></td><td>A·X + B = X</td><td class="formula" style="font-size:13px;padding:6px 10px">X = (A−I)<sup>-1</sup>·(−B)</td><td>X en ambos lados, factor común con I</td></tr>
+        </tbody>
+      </table>
+      <div class="tip" style="margin-top:14px">
+        💡 <b>Regla universal:</b> el lado donde está X determina dónde va la inversa. Las matrices nunca se "pasan dividiendo".
+      </div>
+    </div>
+  </section>
+
+  <!--  PANEL: DETERMINANTES                                     -->
+  <!-- ========================================================= -->
+  <section id="determinantes" class="panel">
+    <div class="card">
+      <h2>Clase 11/04 — Determinantes</h2>
+      <p>Toda matriz cuadrada real tiene asociado un número llamado determinante. Es clave para saber si una matriz tiene inversa y para resolver sistemas por el método de Cramer.</p>
+      <div class="def-grid">
+        <details class="def-card">
+          <summary>¿Qué es el determinante?</summary>
+          <p>Es un <b>escalar</b> (número real) que se puede calcular a partir de cualquier matriz cuadrada. Se nota det(A) o |A|.</p>
+        </details>
+        <details class="def-card">
+          <summary>Singular vs Regular</summary>
+          <p>Si det(A) = 0 → la matriz es <b>singular</b> (no tiene inversa). Si det(A) ≠ 0 → es <b>regular</b> y tiene inversa.</p>
+        </details>
+        <details class="def-card">
+          <summary>Diagonal principal</summary>
+          <p>En matrices triangulares, diagonales y escalares, el determinante es simplemente el producto de los elementos de la diagonal principal.</p>
+        </details>
+        <details class="def-card">
+          <summary>Combinación lineal</summary>
+          <p>Si una fila es combinación lineal de las otras (puede armarse sumando múltiplos de otras filas), el determinante da 0.</p>
+        </details>
+      </div>
+    </div>
+
+    <!-- CÁLCULO SEGÚN ORDEN -->
+    <div class="grid-2">
+      <div class="card">
+        <h3>Determinante de orden 2×2</h3>
+        <details>
+          <summary>Fórmula directa</summary>
+          <p style="margin-top:10px">Se multiplica en diagonal principal y se resta la diagonal secundaria:</p>
+          <div class="formula">
+            det(M) = M<sub>(11)</sub>·M<sub>(22)</sub> − M<sub>(12)</sub>·M<sub>(21)</sub>
+          </div>
+          <div class="info" style="margin-top:10px">
+            💡 <b>Ejemplo:</b> si M = [[3, 1], [2, 4]]<br>
+            det(M) = 3·4 − 1·2 = 12 − 2 = <b>10</b>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3>Determinante de orden 3×3 — Regla de Sarrus</h3>
+        <details>
+          <summary>Truco: repetir las 2 primeras filas</summary>
+          <p style="margin-top:10px">Se repiten las filas 1 y 2 debajo de la fila 3, formando una tabla de 5×3. Luego:</p>
+          <div class="ok" style="margin-bottom:8px">➕ Se <b>suman</b> los productos de las 3 diagonales principales (↘)</div>
+          <div class="warning">➖ Se <b>restan</b> los productos de las 3 diagonales secundarias (↙)</div>
+        </details>
+        <details>
+          <summary>Fórmula completa</summary>
+          <div class="formula" style="font-size:13px;line-height:2">
+            [a<sub>11</sub>·a<sub>22</sub>·a<sub>33</sub>]<br>
+            + [a<sub>21</sub>·a<sub>32</sub>·a<sub>13</sub>]<br>
+            + [a<sub>31</sub>·a<sub>12</sub>·a<sub>23</sub>]<br>
+            − [a<sub>13</sub>·a<sub>22</sub>·a<sub>31</sub>]<br>
+            − [a<sub>23</sub>·a<sub>32</sub>·a<sub>11</sub>]<br>
+            − [a<sub>33</sub>·a<sub>12</sub>·a<sub>21</sub>]
+          </div>
+          <div class="warning" style="margin-top:10px">⚠️ La regla de Sarrus es <b>exclusiva para matrices 3×3</b>. No funciona para órdenes mayores.</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- PROPIEDADES -->
+    <div class="card">
+      <h3>Propiedades de los determinantes</h3>
+      <p style="margin-bottom:16px;font-size:14px">Estas propiedades permiten simplificar el cálculo sin resolver todo desde cero. Muy útiles en el parcial.</p>
+
+      <div class="grid-2">
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <details>
+            <summary>Prop. 1 — Fila de ceros</summary>
+            <p style="margin-top:8px">Si todos los elementos de una fila (o columna) son cero, el determinante es <b>0</b>.</p>
+            <div class="formula">∃ fila nula ⟹ det(A) = 0</div>
+          </details>
+
+          <details>
+            <summary>Prop. 2 — Transpuesta</summary>
+            <p style="margin-top:8px">El determinante de una matriz es igual al de su transpuesta.</p>
+            <div class="formula">det(A) = det(A<sup>T</sup>)</div>
+            <div class="tip">💡 Todo lo que vale para filas, vale también para columnas.</div>
+          </details>
+
+          <details>
+            <summary>Prop. 3 — Permutar dos líneas paralelas</summary>
+            <p style="margin-top:8px">Si se intercambian dos filas (o dos columnas) entre sí, el determinante <b>cambia de signo</b>.</p>
+            <div class="formula">F<sub>i</sub> ↔ F<sub>j</sub> ⟹ det cambia signo</div>
+          </details>
+
+          <details>
+            <summary>Prop. 4 — Dos líneas iguales</summary>
+            <p style="margin-top:8px">Si dos filas (o columnas) son exactamente iguales, el determinante es <b>0</b>.</p>
+            <div class="formula">F<sub>i</sub> = F<sub>j</sub> ⟹ det(A) = 0</div>
+          </details>
+
+          <details>
+            <summary>Prop. 5 — Multiplicar una línea por n</summary>
+            <p style="margin-top:8px">Si se multiplican todos los elementos de una fila por n, el determinante queda multiplicado por n.</p>
+            <div class="formula">F<sub>i</sub> × n ⟹ det = n · det(A)</div>
+            <div class="warning">⚠️ Distinto a escalar × matriz: acá el n solo "sale" una vez, no n veces.</div>
+          </details>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <details>
+            <summary>Prop. 6 — Líneas proporcionales</summary>
+            <p style="margin-top:8px">Si una fila es el doble, triple o cualquier múltiplo de otra, el determinante es <b>0</b>.</p>
+            <div class="formula">F<sub>i</sub> = k · F<sub>j</sub> ⟹ det(A) = 0</div>
+            <div class="tip">💡 Es consecuencia directa de las propiedades 4 y 5 combinadas.</div>
+          </details>
+
+          <details>
+            <summary>Prop. 7 — Sumar una línea paralela</summary>
+            <p style="margin-top:8px">Si a una fila se le suma otra fila paralela, el determinante <b>no cambia</b>.</p>
+            <div class="formula">F<sub>i</sub> → F<sub>i</sub> + F<sub>j</sub> ⟹ det igual</div>
+          </details>
+
+          <details>
+            <summary>Prop. 8 — Sumar una línea multiplicada por n</summary>
+            <p style="margin-top:8px">Si a una fila se le suma otra fila multiplicada por cualquier escalar n, el determinante <b>no cambia</b>.</p>
+            <div class="formula">F<sub>i</sub> → F<sub>i</sub> + n·F<sub>j</sub> ⟹ det igual</div>
+            <div class="ok">✅ Esta propiedad es la base de los métodos de eliminación (Gauss) sin alterar el determinante.</div>
+          </details>
+
+          <details>
+            <summary>Prop. 10 — Matrices especiales</summary>
+            <p style="margin-top:8px">Para matrices <b>escalar</b>, <b>diagonal</b> y <b>triangular</b> (superior o inferior), el determinante es simplemente el <b>producto de los elementos de la diagonal principal</b>.</p>
+            <div class="formula">det = a<sub>11</sub> · a<sub>22</sub> · a<sub>33</sub> · … · a<sub>nn</sub></div>
+            <div class="tip">💡 Muy útil para calcular rápido cuando se simplifica una matriz a forma triangular.</div>
+          </details>
+        </div>
+
+      </div>
+
+      <div class="tip" style="margin-top:16px">
+        📌 <b>La propiedad 9 no se usa en esta materia.</b>
+      </div>
+    </div>
+
+    <!-- CUADRO RESUMEN DETERMINANTE = 0 -->
+    <div class="card">
+      <h3>⚡ Cuándo el determinante da 0 — resumen rápido</h3>
+      <p style="margin-bottom:14px;font-size:14px">Reconocer estos casos de vista ahorra mucho tiempo en el parcial:</p>
+      <div class="grid-3">
+        <div class="warning">❌ <b>Fila o columna de ceros</b> (Prop. 1)</div>
+        <div class="warning">❌ <b>Dos filas o columnas iguales</b> (Prop. 4)</div>
+        <div class="warning">❌ <b>Dos filas proporcionales</b> (Prop. 6)</div>
+        <div class="warning">❌ <b>Una fila es combinación lineal de las otras</b></div>
+        <div class="ok">✅ Si det ≠ 0 → la matriz tiene inversa (es regular)</div>
+        <div class="ok">✅ Matrices triangulares: multiplicar la diagonal</div>
+      </div>
+    </div>
+
+    <!-- FIN PANEL DETERMINANTES -->
+  </section>
+
+  <!-- ========================================================= -->
+  <!--  PANEL: 15/04 · EJERCICIOS DETERMINANTES                  -->
+  <!-- ========================================================= -->
+  <section id="ejedet1504" class="panel">
+
+    <div class="card">
+      <h2>Clase 15/04 — Ejercicios de propiedades de determinantes</h2>
+      <p style="margin-bottom:14px">En todos los ejercicios el dato de partida es el mismo: la matriz D de orden 3×3 con determinante conocido.</p>
+      <div class="formula" style="text-align:center;width:fit-content">
+        |D| =
+        <span style="font-size:20px;vertical-align:middle">|</span>
+        <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+          a &nbsp; b &nbsp; c<br>
+          d &nbsp; e &nbsp; f<br>
+          g &nbsp; h &nbsp; k
+        </span>
+        <span style="font-size:20px;vertical-align:middle">|</span>
+        &nbsp;= <b>36</b>
+      </div>
+      <div class="tip" style="margin-top:12px">💡 La estrategia en todos los casos es la misma: aplicar propiedades para transformar la matriz dada hasta que quede igual a D, y reemplazar por 36.</div>
+    </div>
+
+    <!-- =================== EJERCICIO C =================== -->
+    <div class="card">
+      <h3>Ejercicio c)</h3>
+      <p style="margin-bottom:14px">Calcular el determinante de la siguiente matriz usando propiedades:</p>
+
+      <div class="formula" style="text-align:center;width:fit-content;margin-bottom:14px">
+        <span style="font-size:20px;vertical-align:middle">|</span>
+        <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+          d &nbsp;&nbsp; e &nbsp;&nbsp; f<br>
+          2a &nbsp; 2b &nbsp; 2c<br>
+          −g &nbsp; −h &nbsp; −k
+        </span>
+        <span style="font-size:20px;vertical-align:middle">|</span>
+      </div>
+
+      <div class="info" style="margin-bottom:12px">
+        Comparando con D: F₁ y F₂ están intercambiadas, F₂ tiene factor 2, F₃ tiene factor −1.
+      </div>
+
+      <details>
+        <summary>Paso 1 — Prop. 5: sacar factores de F₂ y F₃</summary>
+        <p style="margin-top:10px"><b>Propiedad 5:</b> si todos los elementos de una fila están multiplicados por n, ese n sale fuera del determinante.</p>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <div class="formula" style="width:fit-content;text-align:center">
+            <span style="font-size:20px;vertical-align:middle">|</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+              d &nbsp; e &nbsp; f<br>
+              2a &nbsp; 2b &nbsp; 2c<br>
+              −g &nbsp; −h &nbsp; −k
+            </span>
+            <span style="font-size:20px;vertical-align:middle">|</span>
+          </div>
+          <span style="color:var(--primary);font-size:18px">=</span>
+          <div class="formula" style="width:fit-content;text-align:center">
+            2·(−1)·
+            <span style="font-size:20px;vertical-align:middle">|</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+              d &nbsp; e &nbsp; f<br>
+              a &nbsp; b &nbsp; c<br>
+              g &nbsp; h &nbsp; k
+            </span>
+            <span style="font-size:20px;vertical-align:middle">|</span>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:10px">Sale 2 de F₂ y (−1) de F₃. Cada fila aporta su propio factor.</div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Paso 2 — Prop. 3: permutar F₁ ↔ F₂</summary>
+        <p style="margin-top:10px"><b>Propiedad 3:</b> intercambiar dos filas cambia el signo del determinante → aparece un (−1) adicional.</p>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <div class="formula" style="width:fit-content;text-align:center">
+            2·(−1)·
+            <span style="font-size:20px;vertical-align:middle">|</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+              d &nbsp; e &nbsp; f<br>
+              a &nbsp; b &nbsp; c<br>
+              g &nbsp; h &nbsp; k
+            </span>
+            <span style="font-size:20px;vertical-align:middle">|</span>
+          </div>
+          <span style="color:var(--primary);font-size:18px">=</span>
+          <div class="formula" style="width:fit-content;text-align:center">
+            2·(−1)·(−1)·
+            <span style="font-size:20px;vertical-align:middle">|</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+              a &nbsp; b &nbsp; c<br>
+              d &nbsp; e &nbsp; f<br>
+              g &nbsp; h &nbsp; k
+            </span>
+            <span style="font-size:20px;vertical-align:middle">|</span>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:10px">La matriz del determinante ya es igual a D.</div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Resultado</summary>
+        <div class="formula" style="margin-top:10px">2 · (−1) · (−1) · |D| = 2 · 1 · 36</div>
+        <div class="formula" style="border-color:var(--primary);background:var(--primary-glow);color:var(--primary-light);margin-top:8px">= <b>72</b></div>
+        <table style="margin-top:14px">
+          <thead><tr><th>Paso</th><th>Propiedad</th><th>Factor acumulado</th></tr></thead>
+          <tbody>
+            <tr><td>Inicio</td><td>—</td><td>1</td></tr>
+            <tr><td>1a</td><td>Prop. 5 — sale 2 de F₂</td><td>2</td></tr>
+            <tr><td>1b</td><td>Prop. 5 — sale −1 de F₃</td><td>2·(−1)</td></tr>
+            <tr><td>2</td><td>Prop. 3 — F₁ ↔ F₂</td><td>2·(−1)·(−1)</td></tr>
+            <tr><td>Final</td><td>|D| = 36</td><td><b>72</b></td></tr>
+          </tbody>
+        </table>
+      </details>
+    </div>
+
+    <!-- =================== EJERCICIO F =================== -->
+    <div class="card">
+      <h3>Ejercicio f)</h3>
+      <p style="margin-bottom:14px">Calcular el determinante de la siguiente matriz:</p>
+
+      <div class="formula" style="text-align:center;width:fit-content;margin-bottom:14px">
+        <span style="font-size:20px;vertical-align:middle">|</span>
+        <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+          a+b &nbsp; b+c &nbsp; c+a<br>
+          d+e &nbsp; e+f &nbsp; f+d<br>
+          g+h &nbsp; h+k &nbsp; k+g
+        </span>
+        <span style="font-size:20px;vertical-align:middle">|</span>
+      </div>
+
+      <details>
+        <summary>Paso 1 — Props. 7 y 8: C₁ ← C₁ − C₂ + C₃</summary>
+        <p style="margin-top:10px"><b>Propiedad 7:</b> sumar a una columna otra columna paralela no cambia el determinante.<br>
+        <b>Propiedad 8:</b> sumar a una columna otra columna multiplicada por n tampoco lo cambia.</p>
+        <p style="margin-top:8px">Operamos sobre C₁: le restamos C₂ y le sumamos C₃ elemento a elemento:</p>
+        <div class="info" style="margin-top:10px">
+          (a+b) − (b+c) + (c+a) = a+b−b−c+c+a = <b>2a</b><br>
+          (d+e) − (e+f) + (f+d) = d+e−e−f+f+d = <b>2d</b><br>
+          (g+h) − (h+k) + (k+g) = g+h−h−k+k+g = <b>2g</b>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <div class="formula" style="width:fit-content;text-align:center">
+            <span style="font-size:20px;vertical-align:middle">|</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+              2a &nbsp; b+c &nbsp; c+a<br>
+              2d &nbsp; e+f &nbsp; f+d<br>
+              2g &nbsp; h+k &nbsp; k+g
+            </span>
+            <span style="font-size:20px;vertical-align:middle">|</span>
+          </div>
+        </div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Paso 2 — Prop. 5: sacar el 2 de C₁</summary>
+        <p style="margin-top:10px">C₁ tiene factor 2 en todos sus elementos → sale fuera del determinante.</p>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <div class="formula" style="width:fit-content;text-align:center">
+            2·
+            <span style="font-size:20px;vertical-align:middle">|</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+              a &nbsp; b+c &nbsp; c+a<br>
+              d &nbsp; e+f &nbsp; f+d<br>
+              g &nbsp; h+k &nbsp; k+g
+            </span>
+            <span style="font-size:20px;vertical-align:middle">|</span>
+          </div>
+        </div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Paso 3 — Prop. 8: C₃ ← C₃ − C₁</summary>
+        <p style="margin-top:10px">Restamos C₁ a C₃ para simplificar:</p>
+        <div class="info" style="margin-top:10px">
+          (c+a) − a = <b>c</b><br>
+          (f+d) − d = <b>f</b><br>
+          (k+g) − g = <b>k</b>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <div class="formula" style="width:fit-content;text-align:center">
+            2·
+            <span style="font-size:20px;vertical-align:middle">|</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+              a &nbsp; b+c &nbsp; c<br>
+              d &nbsp; e+f &nbsp; f<br>
+              g &nbsp; h+k &nbsp; k
+            </span>
+            <span style="font-size:20px;vertical-align:middle">|</span>
+          </div>
+        </div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Paso 4 — Prop. 8: C₂ ← C₂ − C₃</summary>
+        <p style="margin-top:10px">Restamos C₃ a C₂ para simplificar:</p>
+        <div class="info" style="margin-top:10px">
+          (b+c) − c = <b>b</b><br>
+          (e+f) − f = <b>e</b><br>
+          (h+k) − k = <b>h</b>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <div class="formula" style="width:fit-content;text-align:center">
+            2·
+            <span style="font-size:20px;vertical-align:middle">|</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+              a &nbsp; b &nbsp; c<br>
+              d &nbsp; e &nbsp; f<br>
+              g &nbsp; h &nbsp; k
+            </span>
+            <span style="font-size:20px;vertical-align:middle">|</span>
+          </div>
+        </div>
+        <div class="ok" style="margin-top:10px">✅ La matriz del determinante ya es igual a D.</div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Resultado</summary>
+        <div class="formula" style="margin-top:10px">2 · |D| = 2 · 36</div>
+        <div class="formula" style="border-color:var(--primary);background:var(--primary-glow);color:var(--primary-light);margin-top:8px">= <b>72</b></div>
+        <table style="margin-top:14px">
+          <thead><tr><th>Paso</th><th>Propiedad</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Props. 7 y 8</td><td>C₁ ← C₁ − C₂ + C₃ → quedan 2a, 2d, 2g</td></tr>
+            <tr><td>2</td><td>Prop. 5</td><td>Sale 2 de C₁</td></tr>
+            <tr><td>3</td><td>Prop. 8</td><td>C₃ ← C₃ − C₁ → quedan c, f, k</td></tr>
+            <tr><td>4</td><td>Prop. 8</td><td>C₂ ← C₂ − C₃ → quedan b, e, h</td></tr>
+            <tr><td>Final</td><td>|D| = 36</td><td><b>2 · 36 = 72</b></td></tr>
+          </tbody>
+        </table>
+      </details>
+    </div>
+
+    <!-- =================== EJERCICIO E =================== -->
+    <div class="card">
+      <h3>Ejercicio e)</h3>
+      <p style="margin-bottom:14px">Calcular el determinante de la siguiente matriz:</p>
+
+      <div class="formula" style="text-align:center;width:fit-content;margin-bottom:14px">
+        <span style="font-size:20px;vertical-align:middle">|</span>
+        <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+          a² &nbsp; a·d &nbsp; a·g<br>
+          b² &nbsp; b·e &nbsp; b·h<br>
+          c² &nbsp; c·f &nbsp; c·k
+        </span>
+        <span style="font-size:20px;vertical-align:middle">|</span>
+      </div>
+
+      <details>
+        <summary>Paso 1 — Prop. 5: sacar el factor común de cada fila</summary>
+        <p style="margin-top:10px">Cada fila tiene un factor común:</p>
+        <div class="info" style="margin-top:10px">
+          F₁ = (a², a·d, a·g) → factor común <b>a</b> → queda (a, d, g)<br>
+          F₂ = (b², b·e, b·h) → factor común <b>b</b> → queda (b, e, h)<br>
+          F₃ = (c², c·f, c·k) → factor común <b>c</b> → queda (c, f, k)
+        </div>
+        <p style="margin-top:10px">Por Prop. 5 aplicada a cada fila, los tres factores salen fuera:</p>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <div class="formula" style="width:fit-content;text-align:center">
+            a·b·c·
+            <span style="font-size:20px;vertical-align:middle">|</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+              a &nbsp; d &nbsp; g<br>
+              b &nbsp; e &nbsp; h<br>
+              c &nbsp; f &nbsp; k
+            </span>
+            <span style="font-size:20px;vertical-align:middle">|</span>
+          </div>
+        </div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Paso 2 — Prop. 2: el determinante de la transpuesta es igual</summary>
+        <p style="margin-top:10px"><b>Propiedad 2:</b> det(A) = det(Aᵀ). La transpuesta de la matriz restante es exactamente D:</p>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px">
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Matriz actual:</p>
+            <div class="formula" style="width:fit-content;text-align:center">
+              <span style="font-size:20px;vertical-align:middle">|</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+                a &nbsp; d &nbsp; g<br>
+                b &nbsp; e &nbsp; h<br>
+                c &nbsp; f &nbsp; k
+              </span>
+              <span style="font-size:20px;vertical-align:middle">|</span>
+            </div>
+          </div>
+          <span style="color:var(--primary);font-size:18px">= det(Dᵀ) = det(D) =</span>
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Matriz D:</p>
+            <div class="formula" style="width:fit-content;text-align:center">
+              <span style="font-size:20px;vertical-align:middle">|</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px">
+                a &nbsp; b &nbsp; c<br>
+                d &nbsp; e &nbsp; f<br>
+                g &nbsp; h &nbsp; k
+              </span>
+              <span style="font-size:20px;vertical-align:middle">|</span>
+            </div>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:10px">💡 Las filas de la matriz actual son las columnas de D → es la transpuesta de D. Y por Prop. 2, det(Dᵀ) = det(D) = 36.</div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Resultado</summary>
+        <div class="formula" style="margin-top:10px">a·b·c · |D| = a·b·c · 36</div>
+        <div class="formula" style="border-color:var(--primary);background:var(--primary-glow);color:var(--primary-light);margin-top:8px">= <b>36abc</b></div>
+        <table style="margin-top:14px">
+          <thead><tr><th>Paso</th><th>Propiedad</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Prop. 5 × 3 filas</td><td>Sale a de F₁, b de F₂, c de F₃ → factor a·b·c</td></tr>
+            <tr><td>2</td><td>Prop. 2 — transpuesta</td><td>La matriz restante es Dᵀ → det = det(D) = 36</td></tr>
+            <tr><td>Final</td><td></td><td><b>a·b·c · 36 = 36abc</b></td></tr>
+          </tbody>
+        </table>
+      </details>
+    </div>
+
+    <!-- DETERMINANTE DEL PRODUCTO E INVERSA -->
+    <div class="card">
+      <h3>Determinante del producto de matrices</h3>
+      <p style="margin-bottom:14px">Tres resultados clave que permiten calcular determinantes de expresiones más complejas sin tener que multiplicar matrices.</p>
+
+      <details>
+        <summary>Regla 1 — Determinante del producto</summary>
+        <p style="margin-top:10px">El determinante del producto de dos matrices es igual al producto de sus determinantes por separado:</p>
+        <div class="formula">|A · B| = |A| · |B|</div>
+        <div class="info" style="margin-top:10px">
+          💡 Esto vale para cualquier par de matrices cuadradas del mismo orden. No importa el orden de los factores para el determinante, porque es un escalar y los escalares sí son conmutativos.
+        </div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Regla 2 — Determinante de una potencia</summary>
+        <p style="margin-top:10px">Si una matriz se eleva a la n, el determinante es igual al determinante de la matriz repetido n veces como producto:</p>
+        <div class="formula">|A⁶| = |A · A · A · A · A · A| = |A| · |A| · |A| · |A| · |A| · |A|</div>
+        <p style="margin-top:10px">Lo que se escribe de forma compacta como:</p>
+        <div class="formula">|Aⁿ| = |A|ⁿ</div>
+        <div class="tip" style="margin-top:10px">💡 Es la consecuencia directa de aplicar la Regla 1 repetidamente: |A·A| = |A|·|A| = |A|², y así sucesivamente.</div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Regla 3 — Forma compacta</summary>
+        <p style="margin-top:10px">Unificando las dos reglas anteriores en la notación más corta:</p>
+        <div class="formula">|A²| = |A|²</div>
+        <p style="margin-top:10px">En general:</p>
+        <div class="formula">|Aⁿ| = |A|ⁿ</div>
+        <div class="ok" style="margin-top:10px">✅ El exponente "pasa" al determinante. La base queda como |A| y el exponente n se conserva.</div>
+      </details>
+
+      <table style="margin-top:14px">
+        <thead><tr><th>Expresión</th><th>Equivalente</th><th>Regla usada</th></tr></thead>
+        <tbody>
+          <tr><td class="formula" style="font-size:13px;padding:8px 12px">|A · B|</td><td class="formula" style="font-size:13px;padding:8px 12px">|A| · |B|</td><td>Regla 1 — producto</td></tr>
+          <tr><td class="formula" style="font-size:13px;padding:8px 12px">|A⁶|</td><td class="formula" style="font-size:13px;padding:8px 12px">|A|⁶</td><td>Regla 2/3 — potencia</td></tr>
+          <tr><td class="formula" style="font-size:13px;padding:8px 12px">|A²|</td><td class="formula" style="font-size:13px;padding:8px 12px">|A|²</td><td>Regla 3 — forma compacta</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Determinante de la matriz inversa</h3>
+      <p style="margin-bottom:14px">Derivación paso a paso a partir de lo que ya sabemos sobre la inversa y la identidad.</p>
+
+      <details>
+        <summary>Punto de partida — A · A⁻¹ = I</summary>
+        <p style="margin-top:10px">Sabemos que toda matriz multiplicada por su inversa da la Identidad:</p>
+        <div class="formula">A · A⁻¹ = I</div>
+        <div class="info" style="margin-top:10px">
+          La Identidad vale 1 como escalar porque su determinante es el producto de su diagonal principal, que son todos 1:<br>
+          <span style="font-family:'DM Serif Display',serif;color:var(--primary);font-size:15px">|I| = 1</span>
+        </div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Paso 1 — Aplicar determinante a ambos lados</summary>
+        <p style="margin-top:10px">Tomamos el determinante de los dos miembros:</p>
+        <div class="formula">|A · A⁻¹| = |I|</div>
+        <p style="margin-top:10px">Aplicamos la Regla 1 (det del producto = producto de dets) al lado izquierdo:</p>
+        <div class="formula">|A| · |A⁻¹| = |I| = 1</div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Paso 2 — Despejar |A⁻¹|</summary>
+        <p style="margin-top:10px">|A| es un escalar, así que podemos dividir ambos lados por él:</p>
+        <div class="formula">|A⁻¹| = 1 / |A|</div>
+        <div class="ok" style="margin-top:10px">✅ El determinante de la inversa es el recíproco del determinante de la original.</div>
+      </details>
+
+      <details style="margin-top:10px" open>
+        <summary>Conclusión — Condición de existencia de la inversa</summary>
+        <p style="margin-top:10px">Para que |A⁻¹| = 1/|A| tenga sentido, el denominador no puede ser cero:</p>
+        <div class="formula">|A| ≠ 0 &nbsp;⟺&nbsp; existe A⁻¹</div>
+        <div class="warning" style="margin-top:10px">⚠️ Si |A| = 0, la división no existe → la inversa no existe → la matriz es <b>singular</b>.</div>
+        <div class="ok">✅ Si |A| ≠ 0, la inversa existe → la matriz es <b>regular</b>.</div>
+
+        <table style="margin-top:14px">
+          <thead><tr><th>Condición</th><th>Nombre</th><th>¿Tiene inversa?</th></tr></thead>
+          <tbody>
+            <tr><td class="formula" style="font-size:13px;padding:8px 12px">|A| = 0</td><td>Singular</td><td>❌ No</td></tr>
+            <tr><td class="formula" style="font-size:13px;padding:8px 12px">|A| ≠ 0</td><td>Regular / No singular</td><td>✅ Sí, y |A⁻¹| = 1/|A|</td></tr>
+          </tbody>
+        </table>
+      </details>
+
+      <!-- DERIVACIÓN COMPLETA VISUAL -->
+      <details style="margin-top:10px">
+        <summary>Derivación completa de un vistazo</summary>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+          <div class="info">A · A⁻¹ = I &nbsp;&nbsp;&nbsp;&nbsp;← definición de inversa</div>
+          <div style="color:var(--muted);font-size:13px;padding-left:8px">↓ aplicar det( ) a ambos lados</div>
+          <div class="info">|A · A⁻¹| = |I|</div>
+          <div style="color:var(--muted);font-size:13px;padding-left:8px">↓ Regla 1: det(producto) = producto de dets | |I| = 1</div>
+          <div class="info">|A| · |A⁻¹| = 1</div>
+          <div style="color:var(--muted);font-size:13px;padding-left:8px">↓ despejar |A⁻¹|</div>
+          <div class="formula" style="border-color:var(--primary);background:var(--primary-glow);color:var(--primary-light)">|A⁻¹| = 1 / |A| &nbsp;&nbsp; (con |A| ≠ 0)</div>
+        </div>
+      </details>
+    </div>
+
+    <!-- EJERCICIO B = P⁻¹·A·P -->
+    <div class="card">
+      <h3>Ejercicio — |B| con B = P⁻¹·A·P, |A| = 12</h3>
+      <p style="margin-bottom:14px">Se pide calcular |B| sabiendo que B = P⁻¹·A·P y que |A| = 12.</p>
+
+      <details>
+        <summary>Paso 1 — Aplicar det( ) a la definición de B</summary>
+        <div class="formula" style="margin-top:10px">|B| = |P⁻¹ · A · P|</div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Paso 2 — Separar determinantes (Regla 1)</summary>
+        <p style="margin-top:10px">El determinante del producto es el producto de los determinantes:</p>
+        <div class="formula">|B| = |P⁻¹| · |A| · |P|</div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Paso 3 — Reemplazar |P⁻¹| = 1/|P|</summary>
+        <p style="margin-top:10px">Por la propiedad del determinante de la inversa:</p>
+        <div class="formula">|B| = (1/|P|) · |A| · |P|</div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Paso 4 — Simplificar |P| con 1/|P|</summary>
+        <p style="margin-top:10px">|P| y 1/|P| son escalares: se cancelan entre sí.</p>
+        <div class="formula">|B| = |A|</div>
+        <div class="formula" style="border-color:var(--primary);background:var(--primary-glow);color:var(--primary-light)">
+          |B| = 12
+        </div>
+        <div class="ok" style="margin-top:10px">✅ Sin importar cuánto vale |P|, siempre se cancela. El resultado es que cualquier matriz B = P⁻¹·A·P tiene el mismo determinante que A.</div>
+      </details>
+    </div>
+
+    <!-- MENOR COMPLEMENTARIO Y COFACTORES -->
+    <div class="card">
+      <h3>Menor complementario y matriz de cofactores</h3>
+      <p style="margin-bottom:14px">El <b>cofactor Mᵢⱼ</b> (también llamado menor complementario) se obtiene tapando la fila i y la columna j, calculando el determinante de lo que queda, y aplicando el signo según la posición.</p>
+
+      <details>
+        <summary>Grilla de signos</summary>
+        <p style="margin-top:10px">La posición de cada elemento determina el signo del cofactor según el patrón:</p>
+        <div style="display:grid;grid-template-columns:repeat(3,56px);gap:6px;margin-top:12px;width:fit-content">
+          <div class="formula" style="text-align:center;padding:10px 0;font-size:18px;margin:0">+</div>
+          <div class="formula" style="text-align:center;padding:10px 0;font-size:18px;margin:0;border-color:var(--danger);background:var(--danger-dim);color:var(--danger)">−</div>
+          <div class="formula" style="text-align:center;padding:10px 0;font-size:18px;margin:0">+</div>
+          <div class="formula" style="text-align:center;padding:10px 0;font-size:18px;margin:0;border-color:var(--danger);background:var(--danger-dim);color:var(--danger)">−</div>
+          <div class="formula" style="text-align:center;padding:10px 0;font-size:18px;margin:0">+</div>
+          <div class="formula" style="text-align:center;padding:10px 0;font-size:18px;margin:0;border-color:var(--danger);background:var(--danger-dim);color:var(--danger)">−</div>
+          <div class="formula" style="text-align:center;padding:10px 0;font-size:18px;margin:0">+</div>
+          <div class="formula" style="text-align:center;padding:10px 0;font-size:18px;margin:0;border-color:var(--danger);background:var(--danger-dim);color:var(--danger)">−</div>
+          <div class="formula" style="text-align:center;padding:10px 0;font-size:18px;margin:0">+</div>
+        </div>
+        <div class="tip" style="margin-top:12px">💡 Regla rápida: si (i+j) es <b>par</b> → signo <b>+</b>. Si (i+j) es <b>impar</b> → signo <b>−</b>.</div>
+      </details>
+
+      <details style="margin-top:12px">
+        <summary>Matriz M de trabajo</summary>
+        <p style="margin-top:10px">Orden 3×3:</p>
+        <div class="formula" style="text-align:center;width:fit-content;margin-top:10px">
+          M =
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+            1 &nbsp; −1 &nbsp;&nbsp; 0<br>
+            0 &nbsp;&nbsp; 1 &nbsp; −1<br>
+            −1 &nbsp;&nbsp; 0 &nbsp;&nbsp; 2
+          </span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+      </details>
+
+      <details style="margin-top:12px">
+        <summary>Cálculo de los 9 cofactores</summary>
+        <p style="margin-top:10px">Para cada elemento: tapar su fila y columna, calcular det. de la submatriz 2×2, aplicar signo.</p>
+        <table style="margin-top:12px">
+          <thead>
+            <tr><th>Cofactor</th><th>Signo</th><th>Submatriz (tapo fila·col)</th><th>Cálculo</th><th>Resultado</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>M₁₁</b></td>
+              <td style="color:var(--primary)">+</td>
+              <td>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+                <span style="font-size:13px;display:inline-block;vertical-align:middle;text-align:center;line-height:1.8;margin:0 4px">1 &nbsp; −1<br>0 &nbsp;&nbsp; 2</span>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+              </td>
+              <td style="font-size:13px">+(1·2 − (−1)·0) = +(2−0)</td>
+              <td><b style="color:var(--primary-light)">2</b></td>
+            </tr>
+            <tr>
+              <td><b>M₁₂</b></td>
+              <td style="color:var(--danger)">−</td>
+              <td>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+                <span style="font-size:13px;display:inline-block;vertical-align:middle;text-align:center;line-height:1.8;margin:0 4px">0 &nbsp; −1<br>−1 &nbsp;&nbsp; 2</span>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+              </td>
+              <td style="font-size:13px">−(0·2 − (−1)·(−1)) = −(0−1)</td>
+              <td><b style="color:var(--primary-light)">1</b></td>
+            </tr>
+            <tr>
+              <td><b>M₁₃</b></td>
+              <td style="color:var(--primary)">+</td>
+              <td>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+                <span style="font-size:13px;display:inline-block;vertical-align:middle;text-align:center;line-height:1.8;margin:0 4px">0 &nbsp; 1<br>−1 &nbsp; 0</span>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+              </td>
+              <td style="font-size:13px">+(0·0 − 1·(−1)) = +(0+1)</td>
+              <td><b style="color:var(--primary-light)">1</b></td>
+            </tr>
+            <tr>
+              <td><b>M₂₁</b></td>
+              <td style="color:var(--danger)">−</td>
+              <td>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+                <span style="font-size:13px;display:inline-block;vertical-align:middle;text-align:center;line-height:1.8;margin:0 4px">−1 &nbsp; 0<br>&nbsp;0 &nbsp; 2</span>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+              </td>
+              <td style="font-size:13px">−((−1)·2 − 0·0) = −(−2)</td>
+              <td><b style="color:var(--primary-light)">2</b></td>
+            </tr>
+            <tr>
+              <td><b>M₂₂</b></td>
+              <td style="color:var(--primary)">+</td>
+              <td>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+                <span style="font-size:13px;display:inline-block;vertical-align:middle;text-align:center;line-height:1.8;margin:0 4px">1 &nbsp; 0<br>−1 &nbsp; 2</span>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+              </td>
+              <td style="font-size:13px">+(1·2 − 0·(−1)) = +(2)</td>
+              <td><b style="color:var(--primary-light)">2</b></td>
+            </tr>
+            <tr>
+              <td><b>M₂₃</b></td>
+              <td style="color:var(--danger)">−</td>
+              <td>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+                <span style="font-size:13px;display:inline-block;vertical-align:middle;text-align:center;line-height:1.8;margin:0 4px">1 &nbsp; −1<br>−1 &nbsp;&nbsp; 0</span>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+              </td>
+              <td style="font-size:13px">−(1·0 − (−1)·(−1)) = −(0−1)</td>
+              <td><b style="color:var(--primary-light)">1</b></td>
+            </tr>
+            <tr>
+              <td><b>M₃₁</b></td>
+              <td style="color:var(--primary)">+</td>
+              <td>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+                <span style="font-size:13px;display:inline-block;vertical-align:middle;text-align:center;line-height:1.8;margin:0 4px">−1 &nbsp; 0<br>&nbsp;1 &nbsp; −1</span>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+              </td>
+              <td style="font-size:13px">+((−1)·(−1) − 0·1) = +(1)</td>
+              <td><b style="color:var(--primary-light)">1</b></td>
+            </tr>
+            <tr>
+              <td><b>M₃₂</b></td>
+              <td style="color:var(--danger)">−</td>
+              <td>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+                <span style="font-size:13px;display:inline-block;vertical-align:middle;text-align:center;line-height:1.8;margin:0 4px">1 &nbsp;&nbsp; 0<br>0 &nbsp; −1</span>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+              </td>
+              <td style="font-size:13px">−(1·(−1) − 0·0) = −(−1)</td>
+              <td><b style="color:var(--primary-light)">1</b></td>
+            </tr>
+            <tr>
+              <td><b>M₃₃</b></td>
+              <td style="color:var(--primary)">+</td>
+              <td>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+                <span style="font-size:13px;display:inline-block;vertical-align:middle;text-align:center;line-height:1.8;margin:0 4px">1 &nbsp; −1<br>0 &nbsp;&nbsp; 1</span>
+                <span style="font-size:14px;vertical-align:middle">|</span>
+              </td>
+              <td style="font-size:13px">+(1·1 − (−1)·0) = +(1)</td>
+              <td><b style="color:var(--primary-light)">1</b></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="tip" style="margin-top:12px">⚠️ M₁₂: el cálculo da <b>1</b>, no 2. −(0·2 − (−1)·(−1)) = −(0−1) = −(−1) = 1. Verificar con el profe si hay una diferencia en los apuntes.</div>
+      </details>
+
+      <details style="margin-top:12px">
+        <summary>Matriz de cofactores</summary>
+        <p style="margin-top:10px">Armando la matriz con todos los cofactores calculados:</p>
+        <div class="formula" style="text-align:center;width:fit-content;margin-top:12px">
+          Cof(M) =
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+            2 &nbsp; 1 &nbsp; 1<br>
+            2 &nbsp; 2 &nbsp; 1<br>
+            1 &nbsp; 1 &nbsp; 1
+          </span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+        <div class="ok" style="margin-top:12px">✅ Todos los cofactores de M son positivos en este caso. El signo ya fue absorbido en el cálculo de cada uno.</div>
+      </details>
+    </div>
+
+    <!-- MATRIZ ADJUNTA -->
+    <div class="card">
+      <h3>Matriz Adjunta</h3>
+      <p style="margin-bottom:14px">La adjunta de una matriz es la <b>transpuesta de su matriz de cofactores</b>.</p>
+
+      <details>
+        <summary>Definición y fórmula</summary>
+        <div class="formula" style="margin-top:10px">Adj(M) = [Cof(M)]ᵀ</div>
+        <div class="info" style="margin-top:10px">
+          Se toman todos los cofactores calculados, se arma la matriz de cofactores y se transpone: las filas pasan a ser columnas.
+        </div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Ejemplo con la matriz M que veníamos usando</summary>
+        <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-top:12px">
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Cof(M):</p>
+            <div class="formula" style="text-align:center;width:fit-content">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+                2 &nbsp; 1 &nbsp; 1<br>
+                2 &nbsp; 2 &nbsp; 1<br>
+                1 &nbsp; 1 &nbsp; 1
+              </span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;font-size:22px;color:var(--primary);padding-top:30px">→ transponer →</div>
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Adj(M) = [Cof(M)]ᵀ:</p>
+            <div class="formula" style="text-align:center;width:fit-content;border-color:var(--primary);background:var(--primary-glow)">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif;color:var(--primary-light)">
+                2 &nbsp; 2 &nbsp; 1<br>
+                1 &nbsp; 2 &nbsp; 1<br>
+                1 &nbsp; 1 &nbsp; 1
+              </span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:12px">💡 Al transponer, C₁₂=1 pasa a la posición (2,1), C₂₁=2 pasa a (1,2), etc. Las filas de Cof(M) se convierten en columnas de Adj(M).</div>
+      </details>
+    </div>
+
+    <!-- PROPIEDAD DE LOS COFACTORES -->
+    <div class="card">
+      <h3>Propiedad de los cofactores — suma cruzada</h3>
+      <p style="margin-bottom:14px">Los cofactores tienen una propiedad clave que se usa para verificar resultados y que aparece al multiplicar una matriz por su adjunta.</p>
+
+      <details>
+        <summary>¿Qué dice la propiedad?</summary>
+        <div class="info" style="margin-top:10px">
+          <b>Suma propia (misma fila):</b> la suma de los productos de los elementos de una fila por sus propios cofactores es igual al determinante.<br><br>
+          <b>Suma cruzada (filas distintas):</b> la suma de los productos de los elementos de una fila por los cofactores de <em>otra fila diferente</em> es siempre igual a <b>cero</b>.
+        </div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Suma propia = |M| (ejemplo con fila 1)</summary>
+        <p style="margin-top:10px">Elementos de F₁ = (1, −1, 0) · cofactores de F₁ = (2, 1, 1):</p>
+        <div class="formula">m₁₁·C₁₁ + m₁₂·C₁₂ + m₁₃·C₁₃ = 1·2 + (−1)·1 + 0·1 = 2 − 1 + 0 = <b>1</b> = |M|</div>
+        <div class="ok" style="margin-top:8px">✅ El resultado es el determinante de M.</div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Suma cruzada = 0 (ejemplos)</summary>
+        <p style="margin-top:10px">Elementos de F₁ multiplicados por cofactores de F₂:</p>
+        <div class="formula">m₁₁·C₂₁ + m₁₂·C₂₂ + m₁₃·C₂₃ = 1·2 + (−1)·2 + 0·1 = 2 − 2 + 0 = <b>0</b></div>
+        <p style="margin-top:10px">Elementos de F₁ multiplicados por cofactores de F₃:</p>
+        <div class="formula">m₁₁·C₃₁ + m₁₂·C₃₂ + m₁₃·C₃₃ = 1·1 + (−1)·1 + 0·1 = 1 − 1 + 0 = <b>0</b></div>
+        <div class="ok" style="margin-top:8px">✅ Siempre que las filas sean distintas, el resultado es 0.</div>
+        <div class="tip" style="margin-top:10px">💡 ¿Por qué da cero? Porque es equivalente a calcular el determinante de una matriz con dos filas iguales (Propiedad 4 → det = 0).</div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Tabla resumen de todas las combinaciones para M</summary>
+        <table style="margin-top:10px">
+          <thead><tr><th>Elementos</th><th>Cofactores de</th><th>Resultado</th></tr></thead>
+          <tbody>
+            <tr><td>F₁ = (1,−1,0)</td><td>F₁ → (2,1,1)</td><td><b style="color:var(--primary)">1 = |M| ✓</b></td></tr>
+            <tr><td>F₁ = (1,−1,0)</td><td>F₂ → (2,2,1)</td><td><b>0</b></td></tr>
+            <tr><td>F₁ = (1,−1,0)</td><td>F₃ → (1,1,1)</td><td><b>0</b></td></tr>
+            <tr><td>F₂ = (0,1,−1)</td><td>F₁ → (2,1,1)</td><td><b>0</b></td></tr>
+            <tr><td>F₂ = (0,1,−1)</td><td>F₂ → (2,2,1)</td><td><b style="color:var(--primary)">1 = |M| ✓</b></td></tr>
+            <tr><td>F₂ = (0,1,−1)</td><td>F₃ → (1,1,1)</td><td><b>0</b></td></tr>
+            <tr><td>F₃ = (−1,0,2)</td><td>F₁ → (2,1,1)</td><td><b>0</b></td></tr>
+            <tr><td>F₃ = (−1,0,2)</td><td>F₂ → (2,2,1)</td><td><b>0</b></td></tr>
+            <tr><td>F₃ = (−1,0,2)</td><td>F₃ → (1,1,1)</td><td><b style="color:var(--primary)">1 = |M| ✓</b></td></tr>
+          </tbody>
+        </table>
+        <div class="info" style="margin-top:10px">Esta tabla es exactamente el producto M · Adj(M), que siempre da |M|·I.</div>
+      </details>
+    </div>
+
+    <!-- REGLA DE LAPLACE -->
+    <div class="card">
+      <h3>Regla de Laplace</h3>
+      <p style="margin-bottom:14px">Permite calcular el determinante de cualquier matriz como la sumatoria del producto de los elementos de una fila (o columna) por sus cofactores correspondientes.</p>
+
+      <details>
+        <summary>Fórmula general — desarrollo por fila i</summary>
+        <div class="formula" style="margin-top:10px">|M| = mᵢ₁·Cᵢ₁ + mᵢ₂·Cᵢ₂ + mᵢ₃·Cᵢ₃</div>
+        <div class="tip" style="margin-top:10px">💡 Conviene elegir la fila o columna que tenga más ceros para minimizar cálculos.</div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Ejemplo — desarrollo por F₁</summary>
+        <p style="margin-top:10px">Usando la fila 1 de M = (1, −1, 0) con cofactores C₁₁=2, C₁₂=1, C₁₃=1:</p>
+        <div class="formula">|M| = m₁₁·C₁₁ + m₁₂·C₁₂ + m₁₃·C₁₃</div>
+        <div class="formula">|M| = 1·2 + (−1)·1 + 0·1</div>
+        <div class="formula">|M| = 2 − 1 + 0</div>
+        <div class="formula" style="border-color:var(--primary);background:var(--primary-glow);color:var(--primary-light)">|M| = <b>1</b></div>
+        <div class="ok" style="margin-top:10px">✅ Se puede verificar con Sarrus para confirmar el mismo resultado.</div>
+      </details>
+    </div>
+
+    <!-- INVERSA POR ADJUNTA -->
+    <div class="card">
+      <h3>Inversa de una matriz por el método de la Adjunta</h3>
+      <p style="margin-bottom:14px">Método alternativo a Gauss-Jordan. Requiere calcular cofactores → adjunta → dividir por el determinante. Ejemplo con A = [[3,5],[1,2]].</p>
+
+      <details>
+        <summary>Paso 1 — Verificar que |A| ≠ 0</summary>
+        <p style="margin-top:10px">Sin esto no hay inversa. Para A de orden 2×2:</p>
+        <div class="formula" style="margin-top:10px">
+          A =
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px;font-family:'DM Serif Display',serif">3 &nbsp; 5<br>1 &nbsp; 2</span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+        <div class="formula" style="margin-top:8px">|A| = 3·2 − 5·1 = 6 − 5 = <b>1</b></div>
+        <div class="ok" style="margin-top:8px">✅ |A| = 1 ≠ 0 → existe la inversa.</div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Paso 2 — Calcular la matriz de cofactores</summary>
+        <p style="margin-top:10px">Para 2×2 la grilla de signos es [[+,−],[−,+]]:</p>
+        <table style="margin-top:10px">
+          <thead><tr><th>Cofactor</th><th>Signo</th><th>Elemento que queda</th><th>Resultado</th></tr></thead>
+          <tbody>
+            <tr><td><b>C₁₁</b></td><td style="color:var(--primary)">+</td><td>tapo F1,C1 → queda 2</td><td><b style="color:var(--primary-light)">2</b></td></tr>
+            <tr><td><b>C₁₂</b></td><td style="color:var(--danger)">−</td><td>tapo F1,C2 → queda 1</td><td><b style="color:var(--primary-light)">−1</b></td></tr>
+            <tr><td><b>C₂₁</b></td><td style="color:var(--danger)">−</td><td>tapo F2,C1 → queda 5</td><td><b style="color:var(--primary-light)">−5</b></td></tr>
+            <tr><td><b>C₂₂</b></td><td style="color:var(--primary)">+</td><td>tapo F2,C2 → queda 3</td><td><b style="color:var(--primary-light)">3</b></td></tr>
+          </tbody>
+        </table>
+        <div class="formula" style="margin-top:10px;text-align:center;width:fit-content">
+          Cof(A) =
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px;font-family:'DM Serif Display',serif">2 &nbsp; −1<br>−5 &nbsp;&nbsp; 3</span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Paso 3 — Transponer Cof(A) para obtener Adj(A)</summary>
+        <div class="formula" style="margin-top:10px;text-align:center;width:fit-content">
+          Adj(A) = [Cof(A)]ᵀ =
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px;font-family:'DM Serif Display',serif">2 &nbsp; −5<br>−1 &nbsp;&nbsp; 3</span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Paso 4 — Dividir Adj(A) por |A|</summary>
+        <div class="formula" style="margin-top:10px">A⁻¹ = Adj(A) / |A| = Adj(A) / 1</div>
+        <div class="formula" style="text-align:center;width:fit-content;border-color:var(--primary);background:var(--primary-glow);color:var(--primary-light)">
+          A⁻¹ =
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 8px;font-family:'DM Serif Display',serif">2 &nbsp; −5<br>−1 &nbsp;&nbsp; 3</span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Paso 5 — Verificación: A · A⁻¹ = I</summary>
+        <table style="margin-top:10px">
+          <thead><tr><th>Elemento</th><th>Operación</th><th>Resultado</th></tr></thead>
+          <tbody>
+            <tr><td>I₁₁</td><td>3·2 + 5·(−1) = 6 − 5</td><td><b>1 ✓</b></td></tr>
+            <tr><td>I₁₂</td><td>3·(−5) + 5·3 = −15 + 15</td><td><b>0 ✓</b></td></tr>
+            <tr><td>I₂₁</td><td>1·2 + 2·(−1) = 2 − 2</td><td><b>0 ✓</b></td></tr>
+            <tr><td>I₂₂</td><td>1·(−5) + 2·3 = −5 + 6</td><td><b>1 ✓</b></td></tr>
+          </tbody>
+        </table>
+        <div class="ok" style="margin-top:10px">✅ A · A⁻¹ = I confirmado.</div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Resumen del método — 5 pasos</summary>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+          <div class="info"><b>1.</b> Calcular |A|. Si |A| = 0 → no hay inversa (matriz singular).</div>
+          <div class="info"><b>2.</b> Calcular todos los cofactores Cᵢⱼ (tapando fila i y columna j, con signo según posición).</div>
+          <div class="info"><b>3.</b> Armar Cof(A) y transponerla → Adj(A) = [Cof(A)]ᵀ.</div>
+          <div class="info"><b>4.</b> Dividir: A⁻¹ = Adj(A) / |A|.</div>
+          <div class="info"><b>5.</b> Opcional: verificar con Gauss-Jordan o haciendo A · A⁻¹ = I.</div>
+        </div>
+        <div class="tip" style="margin-top:12px">💡 Para matrices 2×2 hay un atajo: intercambiar los elementos de la diagonal principal, cambiar el signo de los de la diagonal secundaria, y dividir por |A|.</div>
+      </details>
+    </div>
+
+  </section>
+
+  <!-- ========================================================= -->
+  <!--  PANEL: 18/04 · INVERSA POR OEF Y POR ADJUNTA            -->
+  <!-- ========================================================= -->
+  <section id="clase1804" class="panel">
+
+    <div class="card">
+      <h2>Clase 18/04 — Inversa de matriz por OEF y por Adjunta</h2>
+      <p style="margin-bottom:14px">Se calculó la inversa de la misma matriz E por dos métodos distintos y se verificó que dan el mismo resultado. Buen ejercicio para entender que los métodos son equivalentes.</p>
+      <div class="formula" style="text-align:center;width:fit-content">
+        E =
+        <span style="font-size:20px;vertical-align:middle">⎡</span>
+        <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+          −2 &nbsp; 1 &nbsp; 1<br>
+          &nbsp;1 &nbsp; 2 &nbsp; 3<br>
+          −1 &nbsp; 1 &nbsp; 1
+        </span>
+        <span style="font-size:20px;vertical-align:middle">⎤</span>
+      </div>
+    </div>
+
+    <!-- MÉTODO 1: OEF -->
+    <div class="card">
+      <h3>Método 1 — Inversa por OEF (Gauss-Jordan)</h3>
+      <p style="margin-bottom:14px">Se arma [E | I] y se aplican operaciones elementales por fila hasta obtener [I | E⁻¹].</p>
+
+      <details>
+        <summary>OEF paso a paso</summary>
+        <table style="margin-top:12px">
+          <thead><tr><th>Lado E</th><th>Lado I</th><th>Operación</th></tr></thead>
+          <tbody>
+            <tr>
+              <td style="font-family:monospace;line-height:2">−2 &nbsp; 1 &nbsp; 1<br> 1 &nbsp; 2 &nbsp; 3<br>−1 &nbsp; 1 &nbsp; 1</td>
+              <td style="font-family:monospace;line-height:2">1 &nbsp; 0 &nbsp; 0<br>0 &nbsp; 1 &nbsp; 0<br>0 &nbsp; 0 &nbsp; 1</td>
+              <td>Estado inicial</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F1 ↔ F2 (para tener 1 en posición 1,1)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2"> 1 &nbsp; 2 &nbsp; 3<br>−2 &nbsp; 1 &nbsp; 1<br>−1 &nbsp; 1 &nbsp; 1</td>
+              <td style="font-family:monospace;line-height:2">0 &nbsp; 1 &nbsp; 0<br>1 &nbsp; 0 &nbsp; 0<br>0 &nbsp; 0 &nbsp; 1</td>
+              <td>F1 ↔ F2</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F2 ← F2 + 2·F1 &nbsp;|&nbsp; F3 ← F3 + F1 (anular col. 1 en F2 y F3)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2">1 &nbsp; 2 &nbsp; 3<br>0 &nbsp; 5 &nbsp; 7<br>0 &nbsp; 3 &nbsp; 4</td>
+              <td style="font-family:monospace;line-height:2"> 0 &nbsp; 1 &nbsp; 0<br> 1 &nbsp; 2 &nbsp; 0<br> 0 &nbsp; 1 &nbsp; 1</td>
+              <td>F2 ← F2 + 2·F1<br>F3 ← F3 + F1</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F3 ← 5·F3 − 3·F2 (anular col. 2 en F3, operando con enteros)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2">1 &nbsp; 2 &nbsp;&nbsp; 3<br>0 &nbsp; 5 &nbsp;&nbsp; 7<br>0 &nbsp; 0 &nbsp; −1</td>
+              <td style="font-family:monospace;line-height:2"> 0 &nbsp;&nbsp; 1 &nbsp; 0<br> 1 &nbsp;&nbsp; 2 &nbsp; 0<br>−3 &nbsp; −1 &nbsp; 5</td>
+              <td>F3 ← 5·F3 − 3·F2</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F3 ← −F3 (convertir −1 en 1)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2">1 &nbsp; 2 &nbsp; 3<br>0 &nbsp; 5 &nbsp; 7<br>0 &nbsp; 0 &nbsp; 1</td>
+              <td style="font-family:monospace;line-height:2">0 &nbsp;&nbsp; 1 &nbsp;&nbsp; 0<br>1 &nbsp;&nbsp; 2 &nbsp;&nbsp; 0<br>3 &nbsp;&nbsp; 1 &nbsp; −5</td>
+              <td>F3 ← −F3</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F2 ← F2 − 7·F3 (anular col. 3 en F2)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2">1 &nbsp; 2 &nbsp; 3<br>0 &nbsp; 5 &nbsp; 0<br>0 &nbsp; 0 &nbsp; 1</td>
+              <td style="font-family:monospace;line-height:2">&nbsp;0 &nbsp;&nbsp; 1 &nbsp;&nbsp; 0<br>−20 &nbsp; −5 &nbsp; 35<br>&nbsp;3 &nbsp;&nbsp; 1 &nbsp; −5</td>
+              <td>F2 ← F2 − 7·F3</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F2 ← F2 ÷ 5 (convertir 5 en 1)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2">1 &nbsp; 2 &nbsp; 3<br>0 &nbsp; 1 &nbsp; 0<br>0 &nbsp; 0 &nbsp; 1</td>
+              <td style="font-family:monospace;line-height:2">&nbsp;0 &nbsp;&nbsp; 1 &nbsp;&nbsp; 0<br>−4 &nbsp; −1 &nbsp;&nbsp; 7<br>&nbsp;3 &nbsp;&nbsp; 1 &nbsp; −5</td>
+              <td>F2 ← F2 ÷ 5</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F1 ← F1 − 2·F2 − 3·F3 (anular col. 2 y 3 en F1)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2">1 &nbsp; 0 &nbsp; 0<br>0 &nbsp; 1 &nbsp; 0<br>0 &nbsp; 0 &nbsp; 1</td>
+              <td style="font-family:monospace;line-height:2">−1 &nbsp;&nbsp; 0 &nbsp;&nbsp; 1<br>−4 &nbsp; −1 &nbsp;&nbsp; 7<br>&nbsp;3 &nbsp;&nbsp; 1 &nbsp; −5</td>
+              <td>F1 ← F1 − 2·F2 − 3·F3</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="ok" style="margin-top:12px">
+          ✅ Se llegó a [I | E⁻¹]:
+          <div class="formula" style="text-align:center;width:fit-content;margin-top:10px;border-color:var(--primary);background:var(--primary-glow)">
+            E⁻¹ =
+            <span style="font-size:20px;vertical-align:middle">⎡</span>
+            <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif;color:var(--primary-light)">
+              −1 &nbsp;&nbsp; 0 &nbsp;&nbsp; 1<br>
+              −4 &nbsp; −1 &nbsp;&nbsp; 7<br>
+              &nbsp;3 &nbsp;&nbsp; 1 &nbsp; −5
+            </span>
+            <span style="font-size:20px;vertical-align:middle">⎤</span>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- MÉTODO 2: ADJUNTA -->
+    <div class="card">
+      <h3>Método 2 — Inversa por Adjunta</h3>
+      <p style="margin-bottom:14px">Ruta: |E| con Laplace → Eᵀ → Cof(Eᵀ) → Adj(E) → E⁻¹ = Adj(E)/|E|</p>
+
+      <!-- PASO 1: DETERMINANTE POR LAPLACE -->
+      <details>
+        <summary>Paso 1 — Determinante de E por Laplace (desarrollo por F₁)</summary>
+        <p style="margin-top:10px">Se tapa la fila y columna de cada elemento de F₁ y se calcula el determinante de la submatriz 2×2 resultante. El signo sigue la regla: (i+j) par → +, impar → −.</p>
+
+        <table style="margin-top:12px">
+          <thead><tr><th>Término</th><th>Signo</th><th>Elemento</th><th>Submatriz (tapo F1·Cj)</th><th>det submatriz</th><th>Contribución</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>e₁₁</td>
+              <td style="color:var(--primary)">+</td>
+              <td>−2</td>
+              <td>
+                <span style="font-size:13px;vertical-align:middle">|</span>
+                <span style="font-size:12px;display:inline-block;vertical-align:middle;line-height:1.8;margin:0 4px">2 &nbsp; 3<br>1 &nbsp; 1</span>
+                <span style="font-size:13px;vertical-align:middle">|</span>
+              </td>
+              <td>2·1 − 3·1 = −1</td>
+              <td>(−2)·(−1) = <b>2</b></td>
+            </tr>
+            <tr>
+              <td>e₁₂</td>
+              <td style="color:var(--danger)">−</td>
+              <td>1</td>
+              <td>
+                <span style="font-size:13px;vertical-align:middle">|</span>
+                <span style="font-size:12px;display:inline-block;vertical-align:middle;line-height:1.8;margin:0 4px">1 &nbsp; 3<br>−1 &nbsp; 1</span>
+                <span style="font-size:13px;vertical-align:middle">|</span>
+              </td>
+              <td>1·1 − 3·(−1) = 4</td>
+              <td>−1·4 = <b>−4</b></td>
+            </tr>
+            <tr>
+              <td>e₁₃</td>
+              <td style="color:var(--primary)">+</td>
+              <td>1</td>
+              <td>
+                <span style="font-size:13px;vertical-align:middle">|</span>
+                <span style="font-size:12px;display:inline-block;vertical-align:middle;line-height:1.8;margin:0 4px">1 &nbsp; 2<br>−1 &nbsp; 1</span>
+                <span style="font-size:13px;vertical-align:middle">|</span>
+              </td>
+              <td>1·1 − 2·(−1) = 3</td>
+              <td>1·3 = <b>3</b></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="formula" style="margin-top:12px">|E| = 2 + (−4) + 3 = <b>1</b></div>
+        <div class="ok" style="margin-top:8px">✅ |E| = 1 ≠ 0 → existe la inversa.</div>
+      </details>
+
+      <!-- PASO 2: TRANSPUESTA -->
+      <details style="margin-top:10px">
+        <summary>Paso 2 — Transpuesta de E</summary>
+        <p style="margin-top:10px">Se intercambian filas por columnas:</p>
+        <div class="formula" style="text-align:center;width:fit-content;margin-top:10px">
+          Eᵀ =
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+            −2 &nbsp; 1 &nbsp; −1<br>
+            &nbsp;1 &nbsp; 2 &nbsp;&nbsp; 1<br>
+            &nbsp;1 &nbsp; 3 &nbsp;&nbsp; 1
+          </span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+      </details>
+
+      <!-- PASO 3: COFACTORES DE Eᵀ -->
+      <details style="margin-top:10px">
+        <summary>Paso 3 — Cofactores de Eᵀ</summary>
+        <p style="margin-top:10px">Se calcula cada cofactor tapando la fila y columna del elemento, con el signo según posición:</p>
+        <table style="margin-top:12px">
+          <thead><tr><th>Cofactor</th><th>Signo</th><th>Submatriz</th><th>Cálculo</th><th>Resultado</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>C₁₁</b></td><td style="color:var(--primary)">+</td>
+              <td><span style="font-size:12px">|2,1; 3,1|</span></td>
+              <td style="font-size:13px">+(2·1 − 1·3)</td>
+              <td><b style="color:var(--primary-light)">−1</b></td>
+            </tr>
+            <tr>
+              <td><b>C₁₂</b></td><td style="color:var(--danger)">−</td>
+              <td><span style="font-size:12px">|1,1; 1,1|</span></td>
+              <td style="font-size:13px">−(1·1 − 1·1)</td>
+              <td><b style="color:var(--primary-light)">0</b></td>
+            </tr>
+            <tr>
+              <td><b>C₁₃</b></td><td style="color:var(--primary)">+</td>
+              <td><span style="font-size:12px">|1,3; 1,1|</span></td>
+              <td style="font-size:13px">+(1·3 − 2·1)</td>
+              <td><b style="color:var(--primary-light)">1</b></td>
+            </tr>
+            <tr>
+              <td><b>C₂₁</b></td><td style="color:var(--danger)">−</td>
+              <td><span style="font-size:12px">|1,−1; 3,1|</span></td>
+              <td style="font-size:13px">−(1·1 − (−1)·3)</td>
+              <td><b style="color:var(--primary-light)">−4</b></td>
+            </tr>
+            <tr>
+              <td><b>C₂₂</b></td><td style="color:var(--primary)">+</td>
+              <td><span style="font-size:12px">|−2,−1; 1,1|</span></td>
+              <td style="font-size:13px">+((−2)·1 − (−1)·1)</td>
+              <td><b style="color:var(--primary-light)">−1</b></td>
+            </tr>
+            <tr>
+              <td><b>C₂₃</b></td><td style="color:var(--danger)">−</td>
+              <td><span style="font-size:12px">|−2,1; 1,3|</span></td>
+              <td style="font-size:13px">−((−2)·3 − 1·1)</td>
+              <td><b style="color:var(--primary-light)">7</b></td>
+            </tr>
+            <tr>
+              <td><b>C₃₁</b></td><td style="color:var(--primary)">+</td>
+              <td><span style="font-size:12px">|1,−1; 2,1|</span></td>
+              <td style="font-size:13px">+(1·1 − (−1)·2)</td>
+              <td><b style="color:var(--primary-light)">3</b></td>
+            </tr>
+            <tr>
+              <td><b>C₃₂</b></td><td style="color:var(--danger)">−</td>
+              <td><span style="font-size:12px">|−2,−1; 1,1|</span></td>
+              <td style="font-size:13px">−((−2)·1 − (−1)·1)</td>
+              <td><b style="color:var(--primary-light)">1</b></td>
+            </tr>
+            <tr>
+              <td><b>C₃₃</b></td><td style="color:var(--primary)">+</td>
+              <td><span style="font-size:12px">|−2,1; 1,2|</span></td>
+              <td style="font-size:13px">+((−2)·2 − 1·1)</td>
+              <td><b style="color:var(--primary-light)">−5</b></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="tip" style="margin-top:12px">⚠️ En los apuntes C₁₂ figura como −1 y C₃₃ como 5. Los cálculos correctos dan <b>C₁₂ = 0</b> y <b>C₃₃ = −5</b>. Verificar con el profe.</div>
+      </details>
+
+      <!-- PASO 4: ADJUNTA -->
+      <details style="margin-top:10px">
+        <summary>Paso 4 — Matriz Adjunta de E = [Cof(Eᵀ)]ᵀ</summary>
+        <p style="margin-top:10px">La Adjunta se arma con los cofactores ya calculados (que son los de Eᵀ, por lo que ya están transpuestos respecto a E):</p>
+        <div class="formula" style="text-align:center;width:fit-content;margin-top:10px">
+          Adj(E) =
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+            −1 &nbsp;&nbsp; 0 &nbsp;&nbsp; 1<br>
+            −4 &nbsp; −1 &nbsp;&nbsp; 7<br>
+            &nbsp;3 &nbsp;&nbsp; 1 &nbsp; −5
+          </span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+      </details>
+
+      <!-- PASO 5: INVERSA -->
+      <details style="margin-top:10px">
+        <summary>Paso 5 — E⁻¹ = Adj(E) / |E|</summary>
+        <p style="margin-top:10px">Como |E| = 1, dividir por 1 no cambia los valores:</p>
+        <div class="formula" style="margin-top:10px">E⁻¹ = Adj(E) / 1 = Adj(E)</div>
+        <div class="formula" style="text-align:center;width:fit-content;margin-top:10px;border-color:var(--primary);background:var(--primary-glow)">
+          E⁻¹ =
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif;color:var(--primary-light)">
+            −1 &nbsp;&nbsp; 0 &nbsp;&nbsp; 1<br>
+            −4 &nbsp; −1 &nbsp;&nbsp; 7<br>
+            &nbsp;3 &nbsp;&nbsp; 1 &nbsp; −5
+          </span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+        <div class="ok" style="margin-top:12px">✅ El resultado por Adjunta coincide exactamente con el resultado por OEF. Ambos métodos dan la misma inversa.</div>
+      </details>
+    </div>
+
+    <!-- COMPARACIÓN FINAL -->
+    <div class="card">
+      <h3>Comparación de métodos</h3>
+      <table>
+        <thead><tr><th>Método</th><th>Pasos</th><th>Cuándo conviene</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>OEF (Gauss-Jordan)</b></td>
+            <td>Armar [E|I] y operar filas hasta [I|E⁻¹]</td>
+            <td>Matrices grandes, cuando no necesitás el det. ni los cofactores</td>
+          </tr>
+          <tr>
+            <td><b>Adjunta</b></td>
+            <td>|E| → Eᵀ → Cof(Eᵀ) → Adj(E) → Adj(E)/|E|</td>
+            <td>Matrices pequeñas (2×2, 3×3) o cuando ya tenés el det. calculado</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="tip" style="margin-top:12px">💡 Si |E| = 1, el método de la adjunta es especialmente cómodo porque no hay que dividir: E⁻¹ = Adj(E) directamente.</div>
+    </div>
+
+  </section>
+
+  <!-- ========================================================= -->
+  <!--  PANEL: 18/04 · SISTEMAS DE ECUACIONES                   -->
+  <!-- ========================================================= -->
+  <section id="sistemas" class="panel">
+
+    <div class="card">
+      <h2>Sistemas de ecuaciones lineales — Gauss-Jordan</h2>
+      <p style="margin-bottom:14px">Un sistema de ecuaciones lineales se puede representar en forma matricial y resolver con OEF. La idea es transformar la matriz de coeficientes en la Identidad: cuando eso pasa, la columna de resultados da directamente los valores de las incógnitas.</p>
+      <div class="info">
+        La forma matricial de un sistema A·x = b separa los coeficientes (matriz A), las incógnitas (vector x) y los resultados (vector b). Se trabaja con la <b>matriz ampliada [A | b]</b>.
+      </div>
+    </div>
+
+    <!-- PLANTEO -->
+    <div class="card">
+      <h3>Sistema de ecuaciones — planteo</h3>
+
+      <details>
+        <summary>Sistema original</summary>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+          <div class="formula">3x − 2y + z = 22</div>
+          <div class="formula">&nbsp;x − &nbsp;y + 2z = 8</div>
+          <div class="formula">2x + &nbsp;y − &nbsp;z = 20</div>
+        </div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Representación matricial — A·x = b</summary>
+        <p style="margin-top:10px">Se separan los coeficientes de x, y, z en la matriz A (3×3) y los resultados en el vector b (3×1):</p>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px">
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Matriz A (coeficientes):</p>
+            <div class="formula" style="text-align:center;width:fit-content">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+                3 &nbsp; −2 &nbsp;&nbsp; 1<br>
+                1 &nbsp; −1 &nbsp;&nbsp; 2<br>
+                2 &nbsp;&nbsp; 1 &nbsp; −1
+              </span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+          <div style="font-size:20px;color:var(--primary)">·</div>
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Vector x:</p>
+            <div class="formula" style="text-align:center;width:fit-content">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">x<br>y<br>z</span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+          <div style="font-size:20px;color:var(--primary)">=</div>
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Vector b (resultados):</p>
+            <div class="formula" style="text-align:center;width:fit-content">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">22<br>8<br>20</span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:12px">💡 Trabajamos con la <b>matriz ampliada [A | b]</b>: A y b juntas separadas por una línea vertical. Cuando A se convierte en I, b da directamente x, y, z.</div>
+      </details>
+    </div>
+
+    <!-- OEF -->
+    <div class="card">
+      <h3>Resolución por OEF (Gauss-Jordan)</h3>
+
+      <details>
+        <summary>OEF paso a paso</summary>
+        <table style="margin-top:12px">
+          <thead><tr><th>Lado A</th><th>Lado b</th><th>Operación</th></tr></thead>
+          <tbody>
+            <tr>
+              <td style="font-family:monospace;line-height:2.2"> 3 &nbsp; −2 &nbsp;&nbsp; 1<br> 1 &nbsp; −1 &nbsp;&nbsp; 2<br> 2 &nbsp;&nbsp; 1 &nbsp; −1</td>
+              <td style="font-family:monospace;line-height:2.2;text-align:center">22<br> 8<br>20</td>
+              <td>Estado inicial</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F1 ↔ F2 (para tener 1 en posición 1,1)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2.2"> 1 &nbsp; −1 &nbsp;&nbsp; 2<br> 3 &nbsp; −2 &nbsp;&nbsp; 1<br> 2 &nbsp;&nbsp; 1 &nbsp; −1</td>
+              <td style="font-family:monospace;line-height:2.2;text-align:center"> 8<br>22<br>20</td>
+              <td>F1 ↔ F2</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F2 ← F2 − 3·F1 &nbsp;|&nbsp; F3 ← F3 − 2·F1 (anular col. 1 en F2 y F3)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2.2">1 &nbsp; −1 &nbsp;&nbsp; 2<br>0 &nbsp;&nbsp; 1 &nbsp; −5<br>0 &nbsp;&nbsp; 3 &nbsp; −5</td>
+              <td style="font-family:monospace;line-height:2.2;text-align:center">&nbsp; 8<br>−2<br> 4</td>
+              <td>F2 ← F2 − 3·F1<br>F3 ← F3 − 2·F1</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F3 ← F3 − 3·F2 (anular col. 2 en F3)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2.2">1 &nbsp; −1 &nbsp;&nbsp; 2<br>0 &nbsp;&nbsp; 1 &nbsp; −5<br>0 &nbsp;&nbsp; 0 &nbsp; 10</td>
+              <td style="font-family:monospace;line-height:2.2;text-align:center">&nbsp; 8<br>−2<br>10</td>
+              <td>F3 ← F3 − 3·F2</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F3 ← F3 ÷ 10 (convertir 10 en 1)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2.2">1 &nbsp; −1 &nbsp; 2<br>0 &nbsp;&nbsp; 1 &nbsp; −5<br>0 &nbsp;&nbsp; 0 &nbsp;&nbsp; 1</td>
+              <td style="font-family:monospace;line-height:2.2;text-align:center">&nbsp; 8<br>−2<br>&nbsp; 1</td>
+              <td>F3 ← F3 ÷ 10</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F2 ← F2 + 5·F3 (anular col. 3 en F2)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2.2">1 &nbsp; −1 &nbsp; 2<br>0 &nbsp;&nbsp; 1 &nbsp; 0<br>0 &nbsp;&nbsp; 0 &nbsp; 1</td>
+              <td style="font-family:monospace;line-height:2.2;text-align:center">8<br>3<br>1</td>
+              <td>F2 ← F2 + 5·F3</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F1 ← F1 + F2 − 2·F3 (anular col. 2 y 3 en F1)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2.2">1 &nbsp; 0 &nbsp; 0<br>0 &nbsp; 1 &nbsp; 0<br>0 &nbsp; 0 &nbsp; 1</td>
+              <td style="font-family:monospace;line-height:2.2;text-align:center">9<br>3<br>1</td>
+              <td>F1 ← F1 + F2 − 2·F3</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="ok" style="margin-top:12px">
+          ✅ La matriz A se convirtió en I. El vector b da directamente la solución:
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px">
+            <div class="formula" style="width:fit-content">x = <b>9</b></div>
+            <div class="formula" style="width:fit-content">y = <b>3</b></div>
+            <div class="formula" style="width:fit-content">z = <b>1</b></div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- VERIFICACIÓN -->
+    <div class="card">
+      <h3>Verificación — reemplazar x=9, y=3, z=1 en el sistema original</h3>
+
+      <details>
+        <summary>Comprobar las 3 ecuaciones</summary>
+        <table style="margin-top:12px">
+          <thead><tr><th>Ecuación</th><th>Sustitución</th><th>Cálculo</th><th>Resultado esperado</th><th>¿OK?</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>3x − 2y + z = 22</td>
+              <td>3·9 − 2·3 + 1</td>
+              <td>27 − 6 + 1 = 22</td>
+              <td>22</td>
+              <td style="color:var(--primary)"><b>✓</b></td>
+            </tr>
+            <tr>
+              <td>x − y + 2z = 8</td>
+              <td>9 − 3 + 2·1</td>
+              <td>9 − 3 + 2 = 8</td>
+              <td>8</td>
+              <td style="color:var(--primary)"><b>✓</b></td>
+            </tr>
+            <tr>
+              <td>2x + y − z = 20</td>
+              <td>2·9 + 3 − 1</td>
+              <td>18 + 3 − 1 = 20</td>
+              <td>20</td>
+              <td style="color:var(--primary)"><b>✓</b></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="ok" style="margin-top:10px">✅ Las tres ecuaciones se verifican. La solución es correcta.</div>
+      </details>
+    </div>
+
+    <!-- MÉTODO ADJUNTA PARA SISTEMAS -->
+    <div class="card">
+      <h3>Mismo sistema — Resolución por el método de la Adjunta</h3>
+      <p style="margin-bottom:14px">Partimos de A·X = C y despejamos X usando la inversa de A.</p>
+
+      <details>
+        <summary>Planteo — despejar X</summary>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+          <div class="info">A · X = C &nbsp;&nbsp;&nbsp;← ecuación matricial</div>
+          <div style="color:var(--muted);font-size:13px;padding-left:8px">↓ multiplicar A⁻¹ por la izquierda en ambos lados</div>
+          <div class="info">A⁻¹ · A · X = A⁻¹ · C</div>
+          <div style="color:var(--muted);font-size:13px;padding-left:8px">↓ A⁻¹·A = I y I·X = X</div>
+          <div class="info">I · X = A⁻¹ · C</div>
+          <div class="formula" style="border-color:var(--primary);background:var(--primary-glow);color:var(--primary-light)">
+            X = A⁻¹ · C
+          </div>
+        </div>
+        <div class="tip" style="margin-top:10px">💡 La matriz X de orden 3×1 contiene los valores de x, y, z. Para obtenerla necesitamos A⁻¹, que a su vez necesita |A| y Adj(A).</div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>Paso 1 — Determinante de A por Sarrus</h3>
+
+      <details>
+        <summary>Desarrollo de Sarrus</summary>
+        <p style="margin-top:10px">Se repiten las dos primeras filas debajo de la tercera para leer las diagonales:</p>
+
+        <div style="margin-top:14px;font-family:'DM Serif Display',Georgia,serif;font-size:15px;line-height:2.4;color:var(--ink)">
+          <table style="width:auto;border-collapse:collapse;margin-bottom:10px">
+            <tbody>
+              <tr>
+                <td style="border:none;padding:4px 10px;color:var(--primary-light)">F1 →</td>
+                <td style="border:1px solid var(--primary-line);padding:6px 14px;text-align:center"> 3</td>
+                <td style="border:1px solid var(--primary-line);padding:6px 14px;text-align:center">−2</td>
+                <td style="border:1px solid var(--primary-line);padding:6px 14px;text-align:center"> 1</td>
+              </tr>
+              <tr>
+                <td style="border:none;padding:4px 10px;color:var(--primary-light)">F2 →</td>
+                <td style="border:1px solid var(--primary-line);padding:6px 14px;text-align:center"> 1</td>
+                <td style="border:1px solid var(--primary-line);padding:6px 14px;text-align:center">−1</td>
+                <td style="border:1px solid var(--primary-line);padding:6px 14px;text-align:center"> 2</td>
+              </tr>
+              <tr>
+                <td style="border:none;padding:4px 10px;color:var(--primary-light)">F3 →</td>
+                <td style="border:1px solid var(--primary-line);padding:6px 14px;text-align:center"> 2</td>
+                <td style="border:1px solid var(--primary-line);padding:6px 14px;text-align:center"> 1</td>
+                <td style="border:1px solid var(--primary-line);padding:6px 14px;text-align:center">−1</td>
+              </tr>
+              <tr>
+                <td style="border:none;padding:4px 10px;color:var(--muted);font-size:12px">F1 rep. →</td>
+                <td style="border:1px dashed var(--secondary-line);padding:6px 14px;text-align:center;color:var(--muted)"> 3</td>
+                <td style="border:1px dashed var(--secondary-line);padding:6px 14px;text-align:center;color:var(--muted)">−2</td>
+                <td style="border:1px dashed var(--secondary-line);padding:6px 14px;text-align:center;color:var(--muted)"> 1</td>
+              </tr>
+              <tr>
+                <td style="border:none;padding:4px 10px;color:var(--muted);font-size:12px">F2 rep. →</td>
+                <td style="border:1px dashed var(--secondary-line);padding:6px 14px;text-align:center;color:var(--muted)"> 1</td>
+                <td style="border:1px dashed var(--secondary-line);padding:6px 14px;text-align:center;color:var(--muted)">−1</td>
+                <td style="border:1px dashed var(--secondary-line);padding:6px 14px;text-align:center;color:var(--muted)"> 2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ok" style="margin-bottom:10px">➕ Diagonales principales ↘ (se suman):</div>
+        <div class="formula">d₁ = 3 · (−1) · (−1) = 3</div>
+        <div class="formula">d₂ = (−2) · 2 · 2 = −8</div>
+        <div class="formula">d₃ = 1 · 1 · 1 = 1</div>
+        <div class="formula">Suma ↘ = 3 + (−8) + 1 = <b>−4</b></div>
+
+        <div class="warning" style="margin-top:10px;margin-bottom:10px">➖ Diagonales secundarias ↙ (se restan):</div>
+        <div class="formula">d₄ = 2 · (−1) · 1 = −2</div>
+        <div class="formula">d₅ = 1 · 2 · 3 = 6</div>
+        <div class="formula">d₆ = (−1) · 1 · (−2) = 2</div>
+        <div class="formula">Suma ↙ = (−2) + 6 + 2 = <b>6</b></div>
+
+        <div class="formula" style="margin-top:12px">|A| = (↘) − (↙) = −4 − 6 = <b>−10</b></div>
+        <div class="ok" style="margin-top:8px">✅ |A| = −10 ≠ 0 → existe A⁻¹.</div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>Paso 2 — Transpuesta de A</h3>
+
+      <details>
+        <summary>Calcular Aᵀ</summary>
+        <p style="margin-top:10px">Se intercambian filas por columnas:</p>
+        <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:12px">
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">A original:</p>
+            <div class="formula" style="text-align:center;width:fit-content">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+                 3 &nbsp; −2 &nbsp;&nbsp; 1<br>
+                 1 &nbsp; −1 &nbsp;&nbsp; 2<br>
+                 2 &nbsp;&nbsp; 1 &nbsp; −1
+              </span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+          <div style="font-size:22px;color:var(--primary)">→</div>
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Aᵀ:</p>
+            <div class="formula" style="text-align:center;width:fit-content">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+                 3 &nbsp;&nbsp; 1 &nbsp;&nbsp; 2<br>
+                −2 &nbsp; −1 &nbsp;&nbsp; 1<br>
+                 1 &nbsp;&nbsp; 2 &nbsp; −1
+              </span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>Paso 3 — Cofactores de Aᵀ → Adj(A)</h3>
+
+      <details>
+        <summary>Calcular los 9 cofactores de Aᵀ</summary>
+        <p style="margin-top:10px">Signo según posición: (i+j) par → +, impar → −.</p>
+        <table style="margin-top:12px">
+          <thead><tr><th>Cof.</th><th>Signo</th><th>Submatriz (tapo fila·col de Aᵀ)</th><th>Cálculo</th><th>Resultado</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>C₁₁</b></td><td style="color:var(--primary)">+</td>
+              <td><span style="font-size:12px;font-family:monospace">|−1, 1; 2,−1|</span></td>
+              <td style="font-size:13px">+[(−1)(−1) − 1·2] = +(1−2)</td>
+              <td><b style="color:var(--primary-light)">−1</b></td>
+            </tr>
+            <tr>
+              <td><b>C₁₂</b></td><td style="color:var(--danger)">−</td>
+              <td><span style="font-size:12px;font-family:monospace">|−2, 1; 1,−1|</span></td>
+              <td style="font-size:13px">−[(−2)(−1) − 1·1] = −(2−1)</td>
+              <td><b style="color:var(--primary-light)">−1</b></td>
+            </tr>
+            <tr>
+              <td><b>C₁₃</b></td><td style="color:var(--primary)">+</td>
+              <td><span style="font-size:12px;font-family:monospace">|−2,−1; 1, 2|</span></td>
+              <td style="font-size:13px">+[(−2)·2 − (−1)·1] = +(−4+1)</td>
+              <td><b style="color:var(--primary-light)">−3</b></td>
+            </tr>
+            <tr>
+              <td><b>C₂₁</b></td><td style="color:var(--danger)">−</td>
+              <td><span style="font-size:12px;font-family:monospace">|1, 2; 2,−1|</span></td>
+              <td style="font-size:13px">−[1·(−1) − 2·2] = −(−1−4)</td>
+              <td><b style="color:var(--primary-light)">5</b></td>
+            </tr>
+            <tr>
+              <td><b>C₂₂</b></td><td style="color:var(--primary)">+</td>
+              <td><span style="font-size:12px;font-family:monospace">|3, 2; 1,−1|</span></td>
+              <td style="font-size:13px">+[3·(−1) − 2·1] = +(−3−2)</td>
+              <td><b style="color:var(--primary-light)">−5</b></td>
+            </tr>
+            <tr>
+              <td><b>C₂₃</b></td><td style="color:var(--danger)">−</td>
+              <td><span style="font-size:12px;font-family:monospace">|3, 1; 1, 2|</span></td>
+              <td style="font-size:13px">−[3·2 − 1·1] = −(6−1)</td>
+              <td><b style="color:var(--primary-light)">−5</b></td>
+            </tr>
+            <tr>
+              <td><b>C₃₁</b></td><td style="color:var(--primary)">+</td>
+              <td><span style="font-size:12px;font-family:monospace">|1, 2;−1, 1|</span></td>
+              <td style="font-size:13px">+[1·1 − 2·(−1)] = +(1+2)</td>
+              <td><b style="color:var(--primary-light)">3</b></td>
+            </tr>
+            <tr>
+              <td><b>C₃₂</b></td><td style="color:var(--danger)">−</td>
+              <td><span style="font-size:12px;font-family:monospace">|3, 2;−2, 1|</span></td>
+              <td style="font-size:13px">−[3·1 − 2·(−2)] = −(3+4)</td>
+              <td><b style="color:var(--primary-light)">−7</b></td>
+            </tr>
+            <tr>
+              <td><b>C₃₃</b></td><td style="color:var(--primary)">+</td>
+              <td><span style="font-size:12px;font-family:monospace">|3, 1;−2,−1|</span></td>
+              <td style="font-size:13px">+[3·(−1) − 1·(−2)] = +(−3+2)</td>
+              <td><b style="color:var(--primary-light)">−1</b></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:14px">Los cofactores de Aᵀ forman directamente la Adj(A):</p>
+        <div class="formula" style="text-align:center;width:fit-content;margin-top:10px">
+          Adj(A) =
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+            −1 &nbsp; −1 &nbsp; −3<br>
+             5 &nbsp; −5 &nbsp; −5<br>
+             3 &nbsp; −7 &nbsp; −1
+          </span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>Paso 4 — A⁻¹ = Adj(A) / |A|</h3>
+
+      <details>
+        <summary>Dividir cada elemento por −10</summary>
+        <p style="margin-top:10px">Como |A| = −10, cada elemento de Adj(A) se divide por −10:</p>
+        <div class="formula" style="text-align:center;width:fit-content;margin-top:12px;border-color:var(--primary);background:var(--primary-glow)">
+          A⁻¹ = <span style="font-size:16px;vertical-align:middle">1/−10</span> ·
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:right;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">
+            −1 &nbsp; −1 &nbsp; −3<br>
+             5 &nbsp; −5 &nbsp; −5<br>
+             3 &nbsp; −7 &nbsp; −1
+          </span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+          &nbsp;=&nbsp;
+          <span style="font-size:20px;vertical-align:middle">⎡</span>
+          <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif;color:var(--primary-light)">
+            1/10 &nbsp;&nbsp; 1/10 &nbsp;&nbsp; 3/10<br>
+            −1/2 &nbsp;&nbsp; 1/2 &nbsp;&nbsp; 1/2<br>
+            −3/10 &nbsp; 7/10 &nbsp; 1/10
+          </span>
+          <span style="font-size:20px;vertical-align:middle">⎤</span>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h3>Paso 5 — X = A⁻¹ · C</h3>
+
+      <details>
+        <summary>Multiplicar A⁻¹ por C = (22, 8, 20)</summary>
+        <p style="margin-top:10px">Cada fila de A⁻¹ se multiplica por la columna C para obtener cada incógnita:</p>
+        <table style="margin-top:12px">
+          <thead><tr><th>Incógnita</th><th>Fórmula</th><th>Sustitución</th><th>Cálculo</th><th>Resultado</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>x = x₁₁</b></td>
+              <td style="font-size:12px">a₁₁·c₁₁ + a₁₂·c₂₁ + a₁₃·c₃₁</td>
+              <td style="font-size:12px">(1/10)·22 + (1/10)·8 + (3/10)·20</td>
+              <td style="font-size:12px">2.2 + 0.8 + 6</td>
+              <td><b style="color:var(--primary-light)">9</b></td>
+            </tr>
+            <tr>
+              <td><b>y = x₂₁</b></td>
+              <td style="font-size:12px">a₂₁·c₁₁ + a₂₂·c₂₁ + a₂₃·c₃₁</td>
+              <td style="font-size:12px">(−1/2)·22 + (1/2)·8 + (1/2)·20</td>
+              <td style="font-size:12px">−11 + 4 + 10</td>
+              <td><b style="color:var(--primary-light)">3</b></td>
+            </tr>
+            <tr>
+              <td><b>z = x₃₁</b></td>
+              <td style="font-size:12px">a₃₁·c₁₁ + a₃₂·c₂₁ + a₃₃·c₃₁</td>
+              <td style="font-size:12px">(−3/10)·22 + (7/10)·8 + (1/10)·20</td>
+              <td style="font-size:12px">−6.6 + 5.6 + 2</td>
+              <td><b style="color:var(--primary-light)">1</b></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="ok" style="margin-top:12px">
+          ✅ Solución:
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px">
+            <div class="formula" style="width:fit-content">x = <b>9</b></div>
+            <div class="formula" style="width:fit-content">y = <b>3</b></div>
+            <div class="formula" style="width:fit-content">z = <b>1</b></div>
+          </div>
+          <p style="margin-top:10px;font-size:14px">Mismo resultado que por Gauss-Jordan. Ambos métodos son equivalentes.</p>
+        </div>
+      </details>
+    </div>
+
+    <!-- TIPOS DE SISTEMAS -->
+    <div class="card">
+      <h3>Tipos de sistemas de ecuaciones lineales</h3>
+      <p style="margin-bottom:14px">Según lo que pase con las OEF, un sistema puede tener una solución, infinitas soluciones o ninguna.</p>
+      <table>
+        <thead><tr><th>Tipo</th><th>¿Qué se ve en las OEF?</th><th>Solución</th></tr></thead>
+        <tbody>
+          <tr><td><b style="color:var(--primary)">Compatible determinado</b></td><td>A se convierte en I</td><td>Una única solución (x, y, z exactos)</td></tr>
+          <tr><td><b style="color:var(--warn)">Compatible indeterminado</b></td><td>Al menos una fila queda (0,0,...,0) en A y 0 en C</td><td>Infinitas soluciones (familia paramétrica)</td></tr>
+          <tr><td><b style="color:var(--danger)">Incompatible</b></td><td>Una fila queda (0,0,...,0) en A pero ≠ 0 en C</td><td>Sin solución</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SISTEMA COMPATIBLE INDETERMINADO -->
+    <div class="card">
+      <h3>Sistema compatible indeterminado</h3>
+      <p style="margin-bottom:14px">Cuando dos ecuaciones representan la misma recta (una es múltiplo de la otra), hay infinitas soluciones.</p>
+
+      <details>
+        <summary>Sistema original</summary>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+          <div class="formula">&nbsp;3x + &nbsp;2y = 10</div>
+          <div class="formula">15x + 10y = 50</div>
+        </div>
+        <div class="tip" style="margin-top:10px">💡 La segunda ecuación es exactamente 5 veces la primera → son la misma recta → infinitas soluciones.</div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px">
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Matriz A:</p>
+            <div class="formula" style="text-align:center;width:fit-content">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">3 &nbsp;&nbsp; 2<br>15 &nbsp; 10</span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Vector C:</p>
+            <div class="formula" style="text-align:center;width:fit-content">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">10<br>50</span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>OEF — detectar el sistema indeterminado</summary>
+        <table style="margin-top:12px">
+          <thead><tr><th>Lado A</th><th>Lado C</th><th>Operación</th></tr></thead>
+          <tbody>
+            <tr>
+              <td style="font-family:monospace;line-height:2.4"> 3 &nbsp;&nbsp; 2<br>15 &nbsp; 10</td>
+              <td style="font-family:monospace;line-height:2.4;text-align:center">10<br>50</td>
+              <td>Estado inicial</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F1 ← F1 ÷ 3 (obtener 1 en posición 1,1)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2.4">1 &nbsp; 2/3<br>15 &nbsp; 10</td>
+              <td style="font-family:monospace;line-height:2.4;text-align:center">10/3<br> 50</td>
+              <td>F1 ← F1 ÷ 3</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F2 ← F2 − 15·F1 (anular col. 1 en F2)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2.4">1 &nbsp; 2/3<br>0 &nbsp;&nbsp; 0</td>
+              <td style="font-family:monospace;line-height:2.4;text-align:center">10/3<br>&nbsp; 0</td>
+              <td>F2 ← F2 − 15·F1</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="warning" style="margin-top:12px">⚠️ F2 quedó (0, 0 | 0): una ecuación se anuló completamente → el sistema es <b>compatible indeterminado</b>.</div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Solución paramétrica — y = k</summary>
+        <p style="margin-top:10px">Con la F2 eliminada, solo queda una ecuación con dos incógnitas. Una de ellas es libre: se llama <b>parámetro k</b>.</p>
+        <div class="formula" style="margin-top:10px">y = k &nbsp;&nbsp; (k ∈ ℝ, cualquier número real)</div>
+        <p style="margin-top:10px">Se despeja x de la ecuación que quedó:</p>
+        <div class="formula">x + (2/3)·k = 10/3</div>
+        <div class="formula">x = 10/3 − (2/3)·k</div>
+        <div class="formula" style="border-color:var(--primary);background:var(--primary-glow);color:var(--primary-light)">x = (10 − 2k) / 3</div>
+        <div class="ok" style="margin-top:10px">✅ Solución general: S = { ( (10−2k)/3 ; k ) } con k ∈ ℝ</div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>Verificación con valores particulares de k</summary>
+        <table style="margin-top:10px">
+          <thead><tr><th>k</th><th>x = (10−2k)/3</th><th>Solución particular</th><th>Verificación: 3x+2y=10</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>k = 0</td>
+              <td>(10−0)/3 = 10/3</td>
+              <td><b>S₀ = (10/3 ; 0)</b></td>
+              <td>3·(10/3) + 2·0 = 10 ✓</td>
+            </tr>
+            <tr>
+              <td>k = 1</td>
+              <td>(10−2)/3 = 8/3</td>
+              <td><b>S₁ = (8/3 ; 1)</b></td>
+              <td>3·(8/3) + 2·1 = 8+2 = 10 ✓</td>
+            </tr>
+            <tr>
+              <td>k = 5</td>
+              <td>(10−10)/3 = 0</td>
+              <td><b>S₅ = (0 ; 5)</b></td>
+              <td>3·0 + 2·5 = 10 ✓</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="tip" style="margin-top:10px">💡 Cualquier valor de k genera una solución válida. Hay infinitas soluciones, todas sobre la misma recta.</div>
+      </details>
+    </div>
+
+    <!-- SISTEMA INCOMPATIBLE -->
+    <div class="card">
+      <h3>Sistema incompatible</h3>
+      <p style="margin-bottom:14px">Cuando las ecuaciones representan rectas paralelas (mismo coeficiente angular, distinta ordenada), no hay ningún punto de intersección → sin solución.</p>
+
+      <details>
+        <summary>Sistema original</summary>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+          <div class="formula"> 2x + &nbsp;6y = &nbsp;9</div>
+          <div class="formula">10x + 30y = &nbsp;8</div>
+        </div>
+        <div class="tip" style="margin-top:10px">💡 Los coeficientes de x e y en F2 son 5 veces los de F1, pero el resultado (8) no es 5 veces el de F1 (9·5=45 ≠ 8) → rectas paralelas → sin solución.</div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px">
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Matriz A:</p>
+            <div class="formula" style="text-align:center;width:fit-content">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">2 &nbsp;&nbsp; 6<br>10 &nbsp; 30</span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+          <div>
+            <p style="color:var(--muted);font-size:12px;margin-bottom:6px">Vector C:</p>
+            <div class="formula" style="text-align:center;width:fit-content">
+              <span style="font-size:20px;vertical-align:middle">⎡</span>
+              <span style="display:inline-block;vertical-align:middle;text-align:center;line-height:2.2;margin:0 10px;font-family:'DM Serif Display',serif">9<br>8</span>
+              <span style="font-size:20px;vertical-align:middle">⎤</span>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details style="margin-top:10px">
+        <summary>OEF — detectar la incompatibilidad</summary>
+        <table style="margin-top:12px">
+          <thead><tr><th>Lado A</th><th>Lado C</th><th>Operación</th></tr></thead>
+          <tbody>
+            <tr>
+              <td style="font-family:monospace;line-height:2.4"> 2 &nbsp;&nbsp; 6<br>10 &nbsp; 30</td>
+              <td style="font-family:monospace;line-height:2.4;text-align:center">9<br>8</td>
+              <td>Estado inicial</td>
+            </tr>
+            <tr style="background:var(--primary-glow)">
+              <td colspan="3" style="color:var(--primary);font-size:12px">→ F2 ← F2 − 5·F1 (anular col. 1 en F2)</td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;line-height:2.4">2 &nbsp; 6<br>0 &nbsp; 0</td>
+              <td style="font-family:monospace;line-height:2.4;text-align:center">&nbsp;&nbsp; 9<br>−37</td>
+              <td>F2 ← F2 − 5·F1</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="warning" style="margin-top:12px">
+          ❌ F2 en el lado A quedó (0, 0) pero en el lado C quedó <b>−37 ≠ 0</b>.<br><br>
+          Esto equivale a la ecuación: &nbsp; 0·x + 0·y = −37 &nbsp; → &nbsp; <b>0 = −37</b> → contradicción imposible.
+        </div>
+        <div class="warning" style="margin-top:8px">⛔ El sistema es <b>incompatible</b>: no tiene solución.</div>
+      </details>
+    </div>
+
+  </section>
+
+  <!-- ========================================================= -->
+  <!--  PANEL: MAPA DE PARCIALES                                 -->
+  <!-- ========================================================= -->
+  <section id="parciales" class="panel">
+
+    <div class="card" style="margin-bottom:24px">
+      <h2>Mapa de parciales</h2>
+      <p>Qué entra en cada uno, fechas y estado de avance.</p>
+    </div>
+
+    <div class="parc-grid">
+      <div class="parc-box">
+        <h3>1° Parcial</h3>
+        <div class="parc-date">📅 16 de mayo de 2025</div>
+        <ul class="checklist">
+          <li><span><b>Matrices</b> — conceptos, clasificación, operaciones y propiedades. <span class="badge green" style="font-size:11px;padding:2px 8px">✓ Visto</span></span></li>
+          <li><span><b>Ecuaciones matriciales</b> — los 4 casos con procedimiento completo. <span class="badge green" style="font-size:11px;padding:2px 8px">✓ Visto</span></span></li>
+          <li><span><b>Determinantes</b> — orden 2, Sarrus y 10 propiedades. <span class="badge green" style="font-size:11px;padding:2px 8px">✓ Visto</span></span></li>
+          <li><span><b>Sistemas de ecuaciones</b> — Gauss, Gauss-Jordan, Cramer. <span class="badge yellow" style="font-size:11px;padding:2px 8px">⚡ Próximo</span></span></li>
+          <li><span><b>Matriz insumo-producto</b> — modelo de Leontief.</span></li>
+          <li><span><b>Programación lineal</b> — función objetivo y región factible.</span></li>
+        </ul>
+        <div class="tip" style="margin-top:16px">
+          ⚠️ <b>El profe confirma que toma ecuaciones matriciales en el parcial.</b> Los 3 casos son obligatorios.
+        </div>
+      </div>
+
+      <div class="parc-box">
+        <h3>2° Parcial</h3>
+        <div class="parc-date">📅 11 de julio de 2025</div>
+        <ul class="checklist">
+          <li><span><b>Funciones de varias variables</b> — dominio, imagen, representación.</span></li>
+          <li><span><b>Derivadas parciales</b> — ∂f/∂x y ∂f/∂y, diferencial total.</span></li>
+          <li><span><b>Funciones diferenciables</b> — condición de diferenciabilidad.</span></li>
+          <li><span><b>Implícitas y compuestas</b> — regla de la cadena generalizada.</span></li>
+          <li><span><b>Funciones homogéneas</b> — Teorema de Euler.</span></li>
+          <li><span><b>Extremos</b> — máximos, mínimos y punto silla (Hessiana).</span></li>
+          <li><span><b>Ecuaciones diferenciales</b> — primer orden, separables y lineales.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <h3>📌 Resumen de lo que toma en parcial — según el profe</h3>
+      <table>
+        <thead><tr><th>Tema</th><th>Tipo de ejercicio</th><th>Observación</th></tr></thead>
+        <tbody>
+          <tr><td>Ecuaciones matriciales</td><td>Despejar X matricial</td><td>Confirmado por el profe. 4 casos posibles, incluyendo X en ambos lados.</td></tr>
+          <tr><td>Matrices inversas</td><td>Calcular con Gauss-Jordan</td><td>Aparece dentro de las ecuaciones matriciales.</td></tr>
+          <tr><td>Determinantes</td><td>Calcular det, aplicar propiedades</td><td>Base para los demás temas del parcial.</td></tr>
+          <tr><td>Sistemas de ecuaciones</td><td>Resolver por distintos métodos</td><td>Cramer usa determinantes; Gauss usa filas.</td></tr>
+          <tr><td>Insumo-producto</td><td>Modelo de Leontief</td><td>Aplicación económica directa.</td></tr>
+          <tr><td>Programación lineal</td><td>Optimizar función objetivo</td><td>Vértices de la región factible.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  Matemática II · Licenciatura en Administración · UNLZ · Dashboard de estudio interactivo
+</footer>
+
+<script>
+function openTab(id, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function toggleBox(id){
+  const box = document.getElementById(id);
+  box.style.display = box.style.display==='block' ? 'none' : 'block';
+}
+</script>
+<script>
+window.addEventListener("load", function() {
+  const hash = window.location.hash;
+
+  if (hash === "#ecuacionesMatriciales") {
+    // activar la pestaña correcta
+    openTab('clase1104', document.querySelector('[onclick*="clase1104"]'));
+
+    // hacer scroll al elemento
+    setTimeout(() => {
+      const el = document.querySelector(hash);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }
+});
+</script>
+</body>
+</html>
